@@ -1,0 +1,154 @@
+<div class="container-fluid">
+	<div class="ps" style="position: relative; width: 100%; max-height: 500px;" [perfectScrollbar]="config">
+		<div class="container-fluid">
+			<mat-toolbar class="col-sm-10">
+				<legend class="text-center"><strong>Contactez-nous</strong></legend>
+				<button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+						class="material-icons">close</i></button>
+			</mat-toolbar>
+		</div>
+
+		<div class="container-fluid">
+			<div toastContainer></div>
+			<form class="well form-horizontal" id="form" (ngSubmit)="onSubmit()" [formGroup]="form">
+				<div class="form-group row">
+					<label class="control-label col-sm-2">Nom *</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<div class="input-group-prepend">            
+								 <span class="input-group-text">
+								<i class="fa fa-user"></i>
+							</span> </div>
+							<input [(ngModel)]="contact.nom" formControlName="nom" placeholder="Nom"
+								class="form-control" type="text">
+						</div>
+						<div *ngIf="form.controls['nom'].errors && form.controls['nom'].touched"
+							class="alert alert-danger m-t-8">
+							<div [hidden]="!form.controls['nom'].errors.required">Le nom est requis</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="control-label col-sm-2">N°siret *</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<div class="input-group-prepend">             
+								<span class="input-group-text">
+								<i class="fa fa-star"></i>
+							</span> </div>
+							<input [(ngModel)]="contact.numSiret" formControlName="numSiret" placeholder="Numéro siret"
+								class="form-control" type="text">
+						</div>
+						<div *ngIf="form.controls['numSiret'].errors && form.controls['numSiret'].touched"
+							class="alert alert-danger m-t-10">
+							<div [hidden]="!form.controls['numSiret'].errors.required">Le numéro SIRET est requis</div>
+							<div
+								[hidden]="!form.controls['numSiret'].errors.minlength && !form.controls['numSiret'].errors.maxlength">
+								Le numéro SIRET est composé de 14 caractères
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="form-group row">
+					<label class="control-label col-sm-2">Nom de la société *</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<div class="input-group-prepend">            
+								 <span class="input-group-text">
+								<i class="fa fa-home"></i>
+							</span> </div>
+							<input [(ngModel)]="contact.nomSociete" formControlName="nomSociete"
+								placeholder="Nom de la société" class="form-control" type="text">
+						</div>
+						<div *ngIf="form.controls['nomSociete'].errors && form.controls['nomSociete'].touched"
+							class="alert alert-danger m-t-8">
+							<div [hidden]="!form.controls['nomSociete'].errors.required">Le nom de la société est requis
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="control-label col-sm-2">E-mail *</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<div class="input-group-prepend">             
+								<span class="input-group-text">
+								<i class="fa fa-envelope"></i>
+							</span> </div>
+							<input [(ngModel)]="contact.mail" formControlName="email" placeholder="Adresse mail"
+								class="form-control" type="email">
+						</div>
+						<div *ngIf="form.controls['email'].errors && form.controls['email'].touched"
+							class="alert alert-danger m-t-10">
+							<div [hidden]="!form.controls['email'].errors.required">L'adresse mail est requise</div>
+							<div [hidden]="!form.controls['email'].errors.pattern">L'adresse mail est invalide</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="form-group row">
+					<label class="control-label col-sm-2">Téléphone *</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<div class="input-group-prepend">             
+								<span class="input-group-text">
+								<i class="fa fa-phone"></i>
+							</span> </div>
+							<input [(ngModel)]="contact.telephone" formControlName="telephone"
+								placeholder="Numéro de téléphone" class="form-control" type="text">
+						</div>
+						<div *ngIf="form.controls['telephone'].errors && form.controls['telephone'].touched"
+							class="alert alert-danger">
+							<div [hidden]="!form.controls['telephone'].errors.required">Le numéro de téléphone est
+								requis</div>
+							<div
+								[hidden]="!form.controls['telephone'].errors.pattern && !form.controls['telephone'].errors.minlength && !form.controls['telephone'].errors.maxlength">
+								Le numéro de téléphone est invalide. Format : xx xx xx xx xx
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="control-label col-sm-2">Message *</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<div class="input-group-prepend">             
+								<span class="input-group-text">
+								<i class="fa fa-pencil"></i>
+							</span> </div>
+							<textarea [(ngModel)]="contact.message" formControlName="message" placeholder="Message"
+								class="form-control" type="text"></textarea>
+						</div>
+						<div *ngIf="form.controls['message'].errors && form.controls['message'].touched"
+							class="alert alert-danger">
+							<div [hidden]="!form.controls['message'].errors.required">Le message est requis</div>
+							<div [hidden]="!form.controls['message'].errors.maxlength">Votre message ne doit pas dépasser 2000 caractères.</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="text-center form-group row">
+					<div class="col-sm-11">
+						<button type="submit" class="btn btn-primary mr-5" [disabled]="!form.valid">
+							Envoyer <span class="fa fa-send"></span>
+						</button>
+						<button type="reset" class="btn btn-danger">
+							Annuler
+						</button>
+					</div>
+				</div>
+			</form>
+			<div *ngIf="loading" class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+			</div>
+		</div>
+	</div>
+</div>

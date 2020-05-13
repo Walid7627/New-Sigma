@@ -1,0 +1,36 @@
+fieldset {
+    height: 170px;
+}
+::ng-deep .cdk-overlay-container { 
+    z-index: 1050;
+}
+
+.mat-toolbar {
+    height: 100px;
+    width: 100%;
+    background-color: white;
+}
+
+.close {
+    position: fixed;
+    right: 11%;
+    margin-bottom: 25px; 
+}
+
+button.close {
+    background-color: grey;
+    border-radius: 90%;
+}
+
+.mat-dialog-content {
+    margin: 0 -24px;  
+    padding:0 !important;   
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 40px !important;
+}
+
+ng-select {
+    width: calc(100% - 42px);
+}

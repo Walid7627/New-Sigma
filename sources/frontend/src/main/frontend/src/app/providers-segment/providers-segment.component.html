@@ -1,0 +1,43 @@
+<div class="center">
+    <div><button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+        class="material-icons">close</i></button></div>
+    <div class="search-div">
+      <mat-form-field class="search-form-field" floatLabel="never">
+        <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
+        <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="" (click)="onSearchClear()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  
+    <div class="mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" class="entities-table" matSort matSortActive="id" matSortDirection="asc">
+  
+      <ng-container matColumnDef="nomSociete">
+        <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Nom Societé</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.nomSociete}}</mat-cell>
+      </ng-container>
+  
+  
+      <ng-container matColumnDef="mail">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Mail</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.mail}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="cpv">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>CPV</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.codeCPV}}</mat-cell>
+      </ng-container>
+      
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)"></mat-row>
+    </mat-table>
+  
+    <mat-paginator [pageSizeOptions]="[10, 20, 50]">
+    </mat-paginator>
+    <div *ngIf="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+  

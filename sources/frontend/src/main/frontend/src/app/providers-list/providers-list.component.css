@@ -1,0 +1,43 @@
+.entities-table {
+    overflow: auto;
+    min-height: 250px;
+    width: 100%;
+}
+
+.search-form-field {
+    margin-left: 40px;
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    min-width: 1100px; 
+}
+
+.mat-column-nomSociete {
+    flex: 0 0 20% !important;
+    width: 20% !important;
+}
+
+.mat-column-numSiret {
+    flex: 0 0 17% !important;
+    width: 17% !important;
+}
+
+.mat-column-adresse {
+    flex: 0 0 35% !important;
+    width: 35% !important;
+}
+
+.mat-column-edit, .mat-column-delete, .mat-column-document, .mat-column-contact {
+    flex: 0 0 7% !important;
+    width: 7% !important;
+    justify-content: center;
+}
+
+
+
+.delete_icon {
+    color: red;
+}

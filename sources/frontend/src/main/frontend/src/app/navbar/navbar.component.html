@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="navbar-header">
+        <a class="navbar-brand">S.I.G.M.A</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="home">Accueil</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="canListProviders()"><a class="nav-link" routerLink="/providers">Fournisseurs</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="canViewProfile()"><a class="nav-link" routerLink="/profil">Profil</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="canListEntities()"><a class="nav-link" routerLink="/entities">Entités</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="canListAdminsEntity()"><a class="nav-link" routerLink="/admins-entity">Administrateurs d'entité</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="canListTeams()"><a class="nav-link" routerLink="/teams">Equipes</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="canListPurchasers()"><a class="nav-link" routerLink="/purchasers">Acheteurs</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="canListSegments()"><a class="nav-link" routerLink="/segments">Segments</a></li>
+            <li class="nav-item" routerLinkActive="active" *ngIf="canListVisiteurs()"><a class="nav-link" routerLink="/visiteurs">Visiteurs</a></li>
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li *ngIf="isAuthenticated()"><a class="nav-link">Bonjour, {{authService.getCurrentUser().firstName}} {{authService.getCurrentUser().lastName}}</a></li>
+            <li *ngIf="!isAuthenticated()"><a class="nav-link" routerLink="/inscription"><span class="fa fa-user" ></span> Inscription</a></li>
+            <li *ngIf="!isAuthenticated()"><a class="nav-link" routerLink="/connexion"><span class="fa fa-sign-in" ></span> Connexion</a></li>
+            <li *ngIf="isAuthenticated()"><a class="nav-link" (click)="logout()"><span class="fa fa-sign-out"></span> Déconnexion</a></li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <div toastContainer></div>
+  <div class="container-fluid">
+    <mat-toolbar class="col-sm-10">
+      <!--<span class="fill-remaining-space">Ajout d'une entité</span>-->
+      <legend class="text-center"><strong>Affectation administrateur</strong></legend>
+      <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+          class="material-icons">close</i></button>
+    </mat-toolbar>
+  </div>
+  <div class="container-fluid">
+    <form class="well form-horizontal" (ngSubmit)="onSubmit(adminForm)" [formGroup]="adminForm">
+
+      <fieldset class="scheduler-border">
+        <div class="form-group row">
+          <label class="control-label col-sm-3 my-auto">Administrateur d'entité</label>
+          <div class="col-sm-6 inputGroupContainer my-auto">
+            <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                </span> </div>
+              <ng-select [items]="listFreeAdmin | async" [multiple]="false" [closeOnSelect]="true" 
+                bindLabel="administrateurName" bindValue="id"
+                placeholder="Selectionnez un administrateur pour votre entité" formControlName="administrateur">
+                <ng-template ng-label-tmp let-item="item">
+                  {{item.administrateurName}}
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-sm-3 my-auto">
+            <button type="submit" class="btn btn-primary">
+              Valider <span class="glyphicon glyphicon-send"></span>
+            </button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="container-fluid">
+  <div class="ps" style="position: relative; width: 100%; max-height: 600px;" [perfectScrollbar]="config">
+
+    <div class="container-fluid">
+      <mat-toolbar class="col-sm-10">
+        <legend class="text-center"><strong>Liste des acheteurs</strong></legend>
+        <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+          class="material-icons">close</i></button>
+      </mat-toolbar>
+    </div>
+    <div toastContainer></div>
+    <div class="contacts container-fluid">
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let contact of team.membres" >
+          <mat-expansion-panel-header *ngIf="contact.id != team.responsable.id">
+            <mat-panel-title class="col-4">
+              {{contact.nom}} {{contact.prenom}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{contact.mail}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-list role="list" *ngIf="contact.id != team.responsable.id">
+            <mat-list-item *ngIf="contact.telephone" role="listitem">Téléphone: {{contact.telephone}}</mat-list-item>
+            <mat-list-item role="listitem">Adresse: {{contact.adresse.number + " " + contact.adresse.street + ". " + contact.adresse.postalCode + " " + contact.adresse.city}}</mat-list-item>
+            <mat-list-item>
+              <button type="button" class="btn btn-danger" (click)="removePurchaser(contact)">
+                Supprimer
+              </button>
+            </mat-list-item>
+          </mat-list>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div class="container-fluid">
+      <form class="well form-horizontal" (ngSubmit)="onSubmit(user)" [formGroup]="user">
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border">Ajouter un acheteur</legend>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Acheteur *</label>
+            <div class="col-sm-10">
+              <div class="input-group divMM">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                                        <i class="fa fa-th-list"></i>
+                                    </span> </div>
+                <ng-select [virtualScroll]="true" [items]="listPurchasers | async" [multiple]="false"
+                           [closeOnSelect]="true" bindLabel="libellePurchasers" bindValue="id"
+                           placeholder="Selectionnez des acheteurs" formControlName="responsable">
+                  <ng-template ng-label-tmp let-item="item">
+                    {{item.libellePurchasers}}
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div class="text-center form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary" [disabled]="!user.valid">
+              Ajouter<span class="fa fa-send"></span>
+            </button>
+            <button type="reset" class="btn btn-danger">
+              Annuler
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

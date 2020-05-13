@@ -1,0 +1,189 @@
+<div>
+  <div toastContainer></div>
+  <form class="well form-horizontal" (ngSubmit)="onSubmit(user)" [formGroup]="user">
+
+    <legend class="text-center"><strong>Gestion des contacts</strong></legend>
+    <fieldset class="scheduler-border">
+      <legend class="scheduler-border">Ajouter un contact</legend>
+
+      <div class="form-group row">
+        <label class="control-label col-sm-2">Nom *</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <div class="input-group-prepend"> <span class="input-group-text">
+                <i class="fa fa-user"></i>
+              </span> </div>
+            <input [(ngModel)]="contact.nom" formControlName="nom" placeholder="Nom" class="form-control" type="text">
+          </div>
+          <div *ngIf="user.controls['nom'].errors && user.controls['nom'].touched" class="alert alert-danger m-t-10">
+            <div [hidden]="!user.controls['nom'].errors.required">Le nom est requis</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="control-label col-sm-2">Prénom *</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <div class="input-group-prepend"> <span class="input-group-text">
+                <i class="fa fa-user"></i>
+              </span> </div>
+            <input [(ngModel)]="contact.prenom" formControlName="prenom" placeholder="Prénom" class="form-control"
+              type="text">
+          </div>
+          <div *ngIf="user.controls['prenom'].errors && user.controls['prenom'].touched"
+            class="alert alert-danger m-t-10">
+            <div [hidden]="!user.controls['prenom'].errors.required">Le prénom est requis</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="control-label col-sm-2">Téléphone *</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <div class="input-group-prepend"> <span class="input-group-text">
+                <i class="fa fa-phone"></i>
+              </span> </div>
+            <input [(ngModel)]="contact.telephone" formControlName="telephone" placeholder="Téléphone"
+              class="form-control" type="tel">
+          </div>
+          <div *ngIf="user.controls['telephone'].errors && user.controls['telephone'].touched"
+            class="alert alert-danger">
+            <div [hidden]="!user.controls['telephone'].errors.required">Le numéro de téléphone est
+              requis</div>
+            <div
+              [hidden]="!user.controls['telephone'].errors.pattern && !user.controls['telephone'].errors.minlength && !user.controls['telephone'].errors.maxlength">
+              Le numéro de téléphone est invalide. Format : xx xx xx xx xx
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="control-label col-sm-2">Mobile</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <div class="input-group-prepend"> <span class="input-group-text">
+                <i class="fa fa-mobile"></i>
+              </span> </div>
+            <input formControlName="mobile" placeholder="Mobile" class="form-control" type="tel">
+          </div>
+          <div *ngIf="user.controls['mobile'].errors && user.controls['mobile'].touched" class="alert alert-danger">
+            <div
+              [hidden]="!user.controls['mobile'].errors.pattern && !user.controls['mobile'].errors.minlength && !user.controls['mobile'].errors.maxlength">
+              Le numéro de mobile est invalide. Format : xx xx xx xx xx
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-group row">
+        <label class="control-label col-sm-2">Fax</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <div class="input-group-prepend"> <span class="input-group-text">
+                <i class="fa fa-print"></i>
+              </span> </div>
+            <input [(ngModel)]="contact.fax" formControlName="fax" placeholder="Fax" class="form-control" type="text">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="control-label col-sm-2">Email *</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <div class="input-group-prepend"> <span class="input-group-text">
+                <i class="fa fa-envelope"></i>
+              </span> </div>
+            <input [(ngModel)]="contact.mail" formControlName="mail" placeholder="Email" class="form-control"
+              type="email">
+          </div>
+          <div *ngIf="user.controls['mail'].errors && user.controls['mail'].touched" class="alert alert-danger m-t-10">
+            <div [hidden]="!user.controls['mail'].errors.required">L'adresse mail est requise</div>
+            <div [hidden]="!user.controls['mail'].errors.pattern">L'adresse mail est invalide</div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group row">
+        <label class="control-label col-sm-2">Adresse physique *</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <div class="input-group-prepend"> <span class="input-group-text">
+                <i class="fa fa-map"></i>
+              </span> </div>
+            <input [(ngModel)]="contact.adressePhysique" formControlName="adresse"
+              placeholder="Adresse physique du site" class="form-control" type="text">
+          </div>
+          <div *ngIf="user.controls['adresse'].errors && user.controls['adresse'].touched"
+            class="alert alert-danger m-t-10">
+            <div [hidden]="!user.controls['adresse'].errors.required">L'adresse physique est requise</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <div class="text-center form-group row">
+      <div class="col-sm-12">
+        <button type="submit" class="btn btn-primary" [disabled]="!user.valid">
+          Ajouter<span class="fa fa-send"></span>
+        </button>
+        <!-- <button type="button" class="btn btn-info">
+          Consulter
+        </button> -->
+        <button type="reset" class="btn btn-danger">
+          Annuler
+        </button>
+
+
+      </div>
+    </div>
+
+  </form>
+  <!--<div *ngIf="registrationSuccessful" id="successmessage" class="alert alert-success" role="alert">
+    L'entité a été ajoutée avec succès. <br /> <br />
+  </div>
+
+  <div *ngIf="registrationError" id="errormessage" class="alert alert-danger" role="alert">
+    Erreur lors de l'ajout de l'entité : {{ error }}
+  </div>-->
+
+  <div class="contacts">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let contact of provider.contacts">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{contact.nom}} {{contact.prenom}}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{contact.mail}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-list role="list">
+          <mat-list-item *ngIf="contact.telephone" role="listitem"><b>Téléphone: </b>
+            <div class="input-group-prepend"> <span class="marge">{{contact.telephone}}</span> </div>
+          </mat-list-item>
+          <mat-list-item *ngIf="contact.mobile" role="listitem"><b>Mobile: </b>
+            <div class="input-group-prepend"> <span class="marge">{{contact.mobile}} </span> </div>
+          </mat-list-item>
+          <mat-list-item *ngIf="contact.fax" role="listitem"><b>Fax: </b>
+            <div class="input-group-prepend"> <span class="marge">{{contact.fax}}</span> </div>
+          </mat-list-item>
+          <mat-list-item role="listitem"><b>Adresse: </b>
+            <div class="input-group-prepend"> <span class="marge">{{contact.adresse}}</span> </div>
+          </mat-list-item>
+          <mat-list-item>
+            <button type="button" class="btn btn-danger" (click)="removeContact(contact)">
+              Supprimer
+            </button>
+          </mat-list-item>
+        </mat-list>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

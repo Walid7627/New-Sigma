@@ -1,0 +1,238 @@
+<div class="container-fluid">
+  <div class="ps" style="position: relative; width: 100%; max-height: 600px;" [perfectScrollbar]="config">
+
+      <div class="container-fluid">
+          <mat-toolbar class="col-sm-10">
+            <legend class="text-center"><strong>Liste des contacts</strong></legend>
+            <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+                class="material-icons">close</i></button>
+                <p *ngIf="!contact"> Aucun contact</p>
+          </mat-toolbar>
+
+        </div>
+        <div toastContainer></div>
+    <div class="contacts container-fluid"  >
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let contact of provider.contacts">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="col-4">
+              {{contact.nom}} {{contact.prenom}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{contact.mail}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-list role="list">
+            <mat-list-item *ngIf="contact.telephone" role="listitem">Téléphone: {{contact.telephone}}</mat-list-item>
+            <mat-list-item *ngIf="contact.mobile" role="listitem">Mobile: {{contact.mobile}}</mat-list-item>
+            <mat-list-item *ngIf="contact.fax" role="listitem">Fax: {{contact.fax}}</mat-list-item>
+            <mat-list-item role="listitem">Adresse: {{contact.adresse}}</mat-list-item>
+            <mat-list-item >
+              <button type="button" *ngIf="contact.telephone&&IamNotVisiteur()" class="btn btn-danger" (click)="removeContact(contact)">
+                Supprimer
+              </button>
+            </mat-list-item>
+          </mat-list>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div class="container-fluid" *ngIf="IamNotVisiteur()" >
+
+      <form class="well form-horizontal" (ngSubmit)="onSubmit(user)" [formGroup]="user">
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border">Ajouter un contact</legend>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Nom *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="contact.nom" formControlName="nom" placeholder="Nom" class="form-control"
+                  type="text">
+              </div>
+              <div *ngIf="user.controls['nom'].errors && user.controls['nom'].touched"
+                class="alert alert-danger m-t-10">
+                <div [hidden]="!user.controls['nom'].errors.required">Le nom est requis</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Prénom *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="contact.prenom" formControlName="prenom" placeholder="Prénom" class="form-control"
+                  type="text">
+              </div>
+              <div *ngIf="user.controls['prenom'].errors && user.controls['prenom'].touched"
+                class="alert alert-danger m-t-10">
+                <div [hidden]="!user.controls['prenom'].errors.required">Le prénom est requis</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Téléphone *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-phone"></i>
+                  </span> </div>
+                <input [(ngModel)]="contact.telephone" formControlName="telephone" placeholder="Téléphone"
+                  class="form-control" type="tel">
+              </div>
+              <div *ngIf="user.controls['telephone'].errors && user.controls['telephone'].touched"
+                class="alert alert-danger">
+                <div [hidden]="!user.controls['telephone'].errors.required">Le numéro de téléphone est
+                  requis
+                </div>
+                <div
+                  [hidden]="!user.controls['telephone'].errors.pattern && !user.controls['telephone'].errors.minlength && !user.controls['telephone'].errors.maxlength">
+                  Le numéro de téléphone est invalide. Format : xx xx xx xx xx
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Mobile</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-mobile"></i>
+                  </span> </div>
+                <input formControlName="mobile" placeholder="Mobile" class="form-control" type="tel">
+              </div>
+              <div *ngIf="user.controls['mobile'].errors && user.controls['mobile'].touched" class="alert alert-danger">
+                <div
+                  [hidden]="!user.controls['mobile'].errors.pattern && !user.controls['mobile'].errors.minlength && !user.controls['mobile'].errors.maxlength">
+                  Le numéro de mobile est invalide. Format : xx xx xx xx xx
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Fax</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-print"></i>
+                  </span> </div>
+                <input [(ngModel)]="contact.fax" formControlName="fax" placeholder="Fax" class="form-control"
+                  type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Email *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-envelope"></i>
+                  </span> </div>
+                <input [(ngModel)]="contact.mail" formControlName="mail" placeholder="Email" class="form-control"
+                  type="email">
+              </div>
+              <div *ngIf="user.controls['mail'].errors && user.controls['mail'].touched"
+                class="alert alert-danger m-t-10">
+                <div [hidden]="!user.controls['mail'].errors.required">L'adresse mail est requise</div>
+                <div [hidden]="!user.controls['mail'].errors.pattern">L'adresse mail est invalide</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="form-group row">
+            <label class="control-label col-sm-2">Confirmation</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text"><i class="fa fa-envelope"></i></span> </div>
+                <input [(ngModel)]="contact.confirmmail" formControlName="confirmmail" placeholder="Confirmation de l'email" class="form-control" type="email">
+              </div>
+              <div *ngIf="user.controls['confirmmail'].errors && user.controls['confirmmail'].touched" class="alert alert-danger m-t-10">
+                <div [hidden]="!user.controls['confirmmail'].errors.required">La confirmation est requise</div>
+                <div [hidden]="!user.controls['confirmmail'].errors.invalid">Les adresses mail ne correspondent pas. Veuillez réessayez</div>
+                <div [hidden]="!user.controls['confirmmail'].errors.pattern">L'adresse mail est invalide</div>
+              </div>
+            </div>
+          </div> -->
+
+          <!-- <div class="form-group row">
+            <label class="control-label col-sm-2">Mot de passe</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                  <i class="fa fa-lock"></i>
+                </span> </div>
+                <input [(ngModel)]="contact.password" formControlName="password" placeholder="Mot de passe" class="form-control" type="password">
+              </div>
+              <div *ngIf="user.controls['password'].errors && user.controls['password'].touched" class="alert alert-danger m-t-10">
+                <div [hidden]="!user.controls['password'].errors.required">Le mot de passe est requis</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Confirmation</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text"><i class="fa fa-lock"></i></span> </div>
+                <input [(ngModel)]="contact.confirmpassword" formControlName="confirmpassword" placeholder="Confirmation du mot de passe" class="form-control" type="password">
+              </div>
+              <div *ngIf="user.controls['confirmpassword'].errors && user.controls['confirmpassword'].touched" class="alert alert-danger m-t-10">
+                <div [hidden]="!user.controls['confirmpassword'].errors.required">La confirmation est requise</div>
+                <div [hidden]="!user.controls['confirmpassword'].errors.invalid">Les mots de passe ne correspondent pas. Veuillez réessayez</div>
+
+              </div>
+
+            </div>
+          </div> -->
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Adresse physique *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-map"></i>
+                  </span> </div>
+                <input [(ngModel)]="contact.adressePhysique" formControlName="adresse"
+                  placeholder="Adresse physique du site" class="form-control" type="text">
+              </div>
+              <div *ngIf="user.controls['adresse'].errors && user.controls['adresse'].touched"
+                class="alert alert-danger m-t-10">
+                <div [hidden]="!user.controls['adresse'].errors.required">L'adresse physique est requise</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div class="text-center form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary" [disabled]="!user.valid">
+              Ajouter<span class="fa fa-send"></span>
+            </button>
+            <!-- <button type="button" class="btn btn-info">
+              Consulter
+            </button> -->
+            <button type="reset" class="btn btn-danger">
+              Réinitialiser
+            </button>
+
+
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

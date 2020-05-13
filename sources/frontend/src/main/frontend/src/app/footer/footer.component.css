@@ -1,0 +1,20 @@
+footer {
+    position: fixed;
+    height: 30px;
+    bottom: 0;
+    width: 100%;
+    background-color: #e7e7e7;
+    border-top: solid grey 1px;
+    vertical-align: middle !important;
+    z-index: 0;
+    color: black;
+}
+
+footer a {
+    color: royalblue;
+}
+
+.material-icons {
+    vertical-align: middle !important;
+    padding-bottom: 3px;
+}

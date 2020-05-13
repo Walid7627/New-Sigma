@@ -1,0 +1,24 @@
+a:hover {
+  cursor: pointer;
+}
+
+li a{
+  padding: 15px;
+}
+
+nav {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+ul {
+  height: 100%;
+}
+
+.navbar a , .nav-link{
+  color: #777 !important;
+}
+
+.nav-item.active > .nav-link{
+  color: rgba(0, 0, 0, 0.9) !important;
+}

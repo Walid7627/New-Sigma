@@ -1,0 +1,92 @@
+<div class="center">
+  <div class="search-div">
+    <button mat-raised-button  (click)="onCreate()">
+      <mat-icon>add</mat-icon>Ajouter
+    </button>
+    <mat-form-field class="search-form-field" floatLabel="never">
+      <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="" (click)="onSearchClear()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource" class="purchaser-table" matSort matSortActive="nom" matSortDisableClear matSortDirection="asc">
+
+    <ng-container matColumnDef="nom">
+      <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Nom</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.nom }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="prenom">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Prenom</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.prenom }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="entite">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Entité</mat-header-cell>
+      <mat-cell  *matCellDef="let row">{{row.entite ? row.entite.nomSociete : "" }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="team">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Equipe d'achats</mat-header-cell>
+      <mat-cell  *matCellDef="let row">{{row.equipe ? row.equipe.nom : "" }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef>Editer</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button (click)="onEdit(row)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef>Supprimer</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button (click)="onDelete(row)">
+          <mat-icon class="delete_icon">delete_outline</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)"></mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[10, 20, 50]">
+  </mat-paginator>
+
+<!--<div class="container">
+  <button mat-raised-button  (click)="onCreate()">
+    <mat-icon>add</mat-icon>Ajouter
+  </button>
+  <div class="row">
+    <div class="col">
+      <section class="main">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Nom Entreprise </th>
+            <th>Site Institutionnel</th>
+            <th>email</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let provider of allproviders">
+            <td>{{provider.id}}</td>
+            <td>{{provider.nomSociete}}</td>
+            <td>{{provider.siteInstitutionnel}}</td>
+            <td>{{provider.mail}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</div>
+-->

@@ -1,0 +1,58 @@
+package com.sigma.model;
+
+public enum Privilege {
+
+  // Documents
+
+  // Document apparetenents à l'utilisateur
+  ADD_OWN_DOCUMENT,
+  DELETE_OWN_DOCUMENT,
+  GET_OWN_DOCUMENT,
+
+  // Documents appartenants à d'autres utilisateurs
+  ADD_OTHER_DOCUMENT,
+  DELETE_OTHER_DOCUMENT,
+  GET_OTHER_DOCUMENT,
+
+  // Fournisseurs
+
+  ADD_FOURNISSEUR,
+  DELETE_FOURNISSEUR,
+  GET_FOURNISSEUR,
+
+  // Acheteur
+
+  ADD_ACHETEUR,
+  DELETE_ACHETEUR,
+  GET_ACHETEUR,
+  
+  // Visiteur
+
+  ADD_VISITEUR,
+  DELETE_VISITEUR,
+  GET_VISITEUR,
+
+  // Administrateur Entité
+  ADD_RESPONSABLE_ACHAT,
+  DELETE_RESPONSABLE_ACHAT,
+  GET_RESPONSABLE_ACHAT,
+  CREATE_SEGMENT,
+  DELETE_SEGMENT,
+  GET_SEGMENT,
+  CREATE_TEAM,
+  DELETE_TEAM,
+  GET_TEAM,
+  
+  // Responsable
+  JOIN_SEGMENT,
+  UNJOIN_SEGMENT,
+  
+  // Administrateur SIGMA
+  
+  ADD_ADMINISTRATEUR_ENTITE,
+  DELETE_ADMINISTRATEUR_ENTITE,
+  GET_ADMINISTRATEUR_ENTITE,
+  ADD_ENTITE,
+  DELETE_ENTITE,
+  GET_ENTITE
+}

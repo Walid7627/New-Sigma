@@ -1,0 +1,197 @@
+<div class="container-fluid">
+  <div toastContainer></div>
+  <div class="ps" style="position: relative; width: 100%; max-height: 500px;" [perfectScrollbar]="config">
+    <div class="container-fluid test">
+
+      <!--<mat-dialog-content>-->
+
+      <mat-toolbar class="col-sm-10">
+        <!--<div class="input-group-prepend"> <span class="fill-remaining-space">Ajout d'une entité</span> </div>-->
+        <legend *ngIf="!admin.id" class="text-center"><strong>Ajout d'un administrateur d'entité</strong></legend>
+        <legend *ngIf="admin.id" class="text-center"><strong>Modification d'un administrateur d'entité</strong></legend>
+        <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+            class="material-icons">close</i></button>
+      </mat-toolbar>
+    </div>
+
+    <div class="container-fluid">
+      <form class="well form-horizontal" (ngSubmit)="onSubmit(adminForm)" [formGroup]="adminForm">
+        <fieldset class="scheduler-border">
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Nom *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input formControlName="nom" placeholder="Nom" class="form-control" type="text">
+              </div>
+              <div class="invalid-feedback hidden m-t-10">
+                <div>Le nom est requis</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Prenom *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input formControlName="prenom" placeholder="Prenom" class="form-control" type="text">
+              </div>
+              <div class="invalid-feedback hidden m-t-10">
+                <div>Le prenom est requis</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- *ngIf="entity.controls['nomSociete'].errors && entity.controls['nomSociete'].touched"
+      [hidden]="!entity.controls['nomSociete'].errors.required"
+      -->
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Telephone *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-phone"></i>
+                  </span> </div>
+                <input formControlName="telephone" placeholder="Telephone" class="form-control" type="text">
+              </div>
+              <div *ngIf="adminForm.controls['telephone'].errors && adminForm.controls['telephone'].touched"
+                class="alert alert-danger">
+                <div [hidden]="!adminForm.controls['telephone'].errors.required">Le numéro de téléphone est
+                  requis</div>
+                <div
+                  [hidden]="!adminForm.controls['telephone'].errors.pattern && !adminForm.controls['telephone'].errors.minlength && !adminForm.controls['telephone'].errors.maxlength">
+                  Le numéro de téléphone est invalide. Format : xx xx xx xx xx
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Email *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-envelope"></i>
+                  </span> </div>
+                <input formControlName="mail" placeholder="Email" class="form-control" type="email">
+              </div>
+              <div *ngIf="adminForm.controls['mail'].errors && adminForm.controls['mail'].touched"
+                class="alert alert-danger m-t-10">
+                <div [hidden]="!adminForm.controls['mail'].errors.required">L'adresse mail est requise</div>
+                <div [hidden]="!adminForm.controls['mail'].errors.pattern">L'adresse mail est invalide</div>
+              </div>
+            </div>
+          </div>
+
+          <div formGroupName="adresse">
+
+            <div class="form-group row">
+              <label class="control-label col-sm-2">Adresse *</label>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <div class="input-group-prepend"> <span class="input-group-text">
+                      <i class="fa fa-map"></i>
+                    </span> </div>
+                  <input formControlName="street" placeholder="Adresse de l'entreprise" class="form-control"
+                    type="text">
+                </div>
+                <div class="invalid-feedback hidden m-t-10">
+                  <div>L'adresse est requise</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- *ngIf="entity.get('adresse').get('street').errors && entity.get('adresse').get('street').touched"
+          [hidden]="!entity.get('adresse').get('street').hasError('required')"
+          -->
+
+            <div class="form-group row">
+              <label class="control-label col-sm-2">Code postal *</label>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <div class="input-group-prepend"> <span class="input-group-text">
+                      <i class="fa fa-compass"></i>
+                    </span> </div>
+                  <input formControlName="postalCode" placeholder="Code postal" class="form-control" type="text">
+                </div>
+                <div class="invalid-feedback hidden m-t-10">
+                  <div>Le code postal est requis</div>
+                </div>
+              </div>
+
+              <!-- *ngIf="entity.get('adresse').get('postalCode').errors && entity.get('adresse').get('postalCode').touched" 
+            [hidden]="!entity.get('adresse').get('postalCode').hasError('required')"
+            -->
+
+              <label class="control-label col-sm-1 col-6 offset-3">Ville *</label>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <div class="input-group-prepend"> <span class="input-group-text">
+                      <i class="fa fa-flag"></i>
+                    </span> </div>
+                  <input formControlName="city" placeholder="Ville" class="form-control" type="text">
+                </div>
+                <div class="invalid-feedback hidden m-t-10">
+                  <div>La ville est requise</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- *ngIf="entity.get('adresse').get('city').errors && entity.get('adresse').get('city').touched" 
+        [hidden]="!entity.get('adresse').get('city').hasError('required')"
+        -->
+
+          <!--<div class="form-group row">
+          <label class="control-label col-sm-2">Code APE</label>
+          <div class="col-sm-10">
+            <div class="input-group">
+              <div class="input-group-prepend"> <span class="input-group-text">
+                <i class="fa fa-home"></i>
+              </span> </div>
+              <select class="form-control" formControlName="APE">
+                <option *ngFor="let code of listCodeApe" value="{{code.codeApe}}">{{code.codeApe}} - {{code.libelleApe}}</option>
+              </select>
+            </div>
+          </div>
+        </div>-->
+
+          <div class="text-center form-group row">
+            <div class="col-sm-12">
+              <button *ngIf="!admin.id" type="submit" class="btn btn-primary mr-5" [disabled]="!adminForm.valid">
+                Valider<span class="fa fa-send"></span>
+              </button>
+              <button *ngIf="admin.id" type="submit" class="btn btn-primary mr-5" [disabled]="!adminForm.valid">
+                Modifier<span class="fa fa-send"></span>
+              </button>
+              <button type="reset" class="btn btn-danger">
+                Annuler
+              </button>
+            </div>
+          </div>
+
+
+
+        </fieldset>
+        <div *ngIf="loading" class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+        <div *ngIf="registrationSuccessful" id="successmessage" class="alert alert-success" role="alert">
+          L'administrateur d'entité a été ajouté avec succès. <br /> <br />
+        </div>
+
+        <div *ngIf="registrationError" id="errormessage" class="alert alert-danger" role="alert">
+          Erreur lors de l'ajout de l'administrateur d'entité : {{ error }}
+        </div>
+      </form>
+
+    </div>
+  </div>

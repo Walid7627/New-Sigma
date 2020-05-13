@@ -1,0 +1,46 @@
+.purchaser-table {
+    overflow: auto;
+    min-height: 250px;
+    width: 100%;
+}
+
+.search-form-field {
+    margin-left: 40px;
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    min-width: 1100px; 
+}
+
+.mat-column-nom {
+    flex: 0 0 22% !important;
+    width: 22% !important;
+}
+
+.mat-column-prenom {
+    flex: 0 0 22% !important;
+    width: 22% !important;
+}
+
+.mat-column-entite {
+    flex: 0 0 22% !important;
+    width: 22% !important;
+}
+
+.mat-column-team {
+    flex: 0 0 20% !important;
+    width: 20% !important;
+}
+
+.mat-column-edit, .mat-column-delete{
+    flex: 0 0 7% !important;
+    width: 7% !important;
+    justify-content: center;
+}
+
+.delete_icon {
+    color: red;
+}

@@ -1,0 +1,95 @@
+<div class="container-fluid">
+  <div class="ps" style="position: relative; width: 100%; max-height: 600px;" [perfectScrollbar]="config">
+    <div class="container-fluid">
+      <mat-toolbar class="col-sm-10">
+        <legend class="text-center"><strong>Gestion des documents</strong></legend>
+        <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+            class="material-icons">close</i></button>
+      </mat-toolbar>
+    </div>
+    <div class="container-fluid">
+      <div toastContainer></div>
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border">Ajouter un document</legend>
+
+          <div class="row">
+            <!-- <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3"> -->
+            <div class="row">
+              <div class="col-lg-6 mx-auto">
+                <label class="btn btn-default">
+                  <input type="file" (change)="selectFile($event)">
+                </label>
+
+                <a *ngIf="selectedFiles" class="btn btn-success" (click)="upload()">Upload</a>
+                <a *ngIf="!selectedFiles" class="btn btn-success disabled">Upload</a>
+              </div>
+            </div>
+
+            <!-- </div> -->
+            <div class="row">
+              <div class="col-lg-6 mx-auto">
+                <div *ngIf="currentFileUpload" class="progress">
+                  <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
+                    attr.aria-valuenow="{{uploadProgress.percentage}}" aria-valuemin="0" aria-valuemax="100"
+                    [ngStyle]="{width:uploadProgress.percentage+'%'}">
+                    {{uploadProgress.percentage}}%
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </fieldset>
+    </div>
+
+    <div class="container-fluid">
+      <fieldset class="scheduler-border center">
+        <legend class="scheduler-border">Mes documents</legend>
+        <!-- <div class="container" *ngIf="documents.length > 0"> -->
+        <div class="row">
+          <div class="col-xs-12 col-sm-12  col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 mx-auto">
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let document of documents">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <h5>{{document.name}}</h5>
+                  </mat-panel-title>
+
+                </mat-expansion-panel-header>
+
+                <div class="panel-body center">
+                  <button type="button" class="btn btn-default"
+                    (click)='getDocument(document.url, document.name, openTypePopup)'>
+                    <span class="center-block">Consulter
+                      <span class="glyphicon glyphicon-open-file"></span>
+                    </span>
+                  </button>
+
+                  <button type="button" class="btn btn-default"
+                    (click)='getDocument(document.url, document.name, openTypeDownload)'>
+                    <span class="center-block">Télécharger
+                      <span class="glyphicon glyphicon-download-alt"></span>
+                    </span>
+                  </button>
+
+                  <button type="button" class="btn btn-default" (click)='delete(document.url)'>
+                    <span class="center-block">Supprimer
+                      <span class="glyphicon glyphicon glyphicon-trash"></span>
+                    </span>
+                  </button>
+                </div>
+
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+
+
+        </div>
+      </fieldset>
+
+
+    </div>
+
+  </div>
+
+</div>

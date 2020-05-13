@@ -1,0 +1,492 @@
+<div class="container">
+    <div toastContainer></div>
+    <form class="well form-horizontal" (ngSubmit)="onSubmit(user)" [formGroup]="user">
+
+        <legend class="text-center"><strong>Formulaire d'inscription</strong></legend>
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Mon Entreprise</legend>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">N°siret *</label>
+                <div class="col-sm-10 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-star"></i>
+                            </span>
+                        </div>
+                        <input formControlName="numSiret" placeholder="Numéro siret" class="form-control" type="text">
+                    </div>
+                    <div *ngIf="user.controls['numSiret'].errors && user.controls['numSiret'].touched"
+                        class="alert alert-danger m-t-10">
+                        <div [hidden]="!user.controls['numSiret'].errors.required">Le numéro SIRET est requis</div>
+                        <div
+                            [hidden]="!user.controls['numSiret'].errors.minlength && !user.controls['numSiret'].errors.maxlength">
+                            Le numéro SIRET est composé de 14 caractères</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">Raison sociale *</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-home"></i>
+                            </span>
+                        </div>
+                        <input formControlName="raisonSociale" placeholder="Raison sociale" class="form-control"
+                            type="text">
+                    </div>
+                    <div *ngIf="user.controls['raisonSociale'].errors && user.controls['raisonSociale'].touched"
+                        class="alert alert-danger m-t-10">
+                        <div [hidden]="!user.controls['raisonSociale'].errors.required">La raison sociale est requise
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">Nom de l'entreprise *</label>
+                <div class="col-sm-10 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-home"></i>
+                            </span>
+                        </div>
+                        <input formControlName="nomSociete" placeholder="Nom de l'entreprise" class="form-control"
+                            type="text">
+                    </div>
+                    <div *ngIf="user.controls['nomSociete'].errors && user.controls['nomSociete'].touched"
+                        class="alert alert-danger m-t-10">
+                        <div [hidden]="!user.controls['nomSociete'].errors.required">Le nom de l'entreprise est requis
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">Description</label>
+                <div class="col-sm-10 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-pencil"></i>
+                            </span>
+                        </div>
+                        <textarea formControlName="description" placeholder="Description de l'activité de l'entreprise"
+                            class="form-control" type="text"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">Code de rattachement</label>
+                <div class="col-sm-3 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-home"></i> </span>
+                        </div>
+                        <select class="form-control" formControlName="typeEntreprise">
+
+                            <option value="TYPE_MAISON_MERE">Maison mère</option>
+                            <option value="TYPE_FILIALE">Filiale</option>
+                            <option value="TYPE_SUCCURSALE">Succursale</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-7 row divMM" [hidden]="user.get('typeEntreprise').value == 'TYPE_MAISON_MERE'">
+                    <label class="control-label col-sm-3 ">Maison mère</label>
+                    <div class="col-sm-9 divMM">
+                        <div class="input-group">
+                            <ng-select [items]="listMotherCompany | async" [multiple]="false" [closeOnSelect]="true"
+                                bindLabel="providerName" bindValue="id"
+                                placeholder="Selectionnez une maison mère pour votre filiale"
+                                formControlName="maisonMere">
+                                <ng-template ng-label-tmp let-item="item">
+                                    {{item.providerName}}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div formGroupName="adresse">
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Adresse *</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-map"></i>
+                                </span>
+                            </div>
+                            <input formControlName="street" placeholder="Adresse de l'entreprise" class="form-control"
+                                type="text">
+                        </div>
+                        <div *ngIf="user.get('adresse').get('street').errors && user.get('adresse').get('street').touched"
+                            class="alert alert-danger m-t-10">
+                            <div [hidden]="!user.get('adresse').get('street').hasError('required')">L'adresse est
+                                requise</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Code postal *</label>
+                    <div class="col-sm-4 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-compass"></i>
+                                </span>
+                            </div>
+                            <input formControlName="postalCode" placeholder="Code postal" class="form-control"
+                                type="text">
+                        </div>
+                        <div *ngIf="user.get('adresse').get('postalCode').errors && user.get('adresse').get('postalCode').touched"
+                            class="alert alert-danger m-t-10">
+                            <div [hidden]="!user.get('adresse').get('postalCode').hasError('required')">Le code postal
+                                est requis</div>
+                        </div>
+                    </div>
+
+                    <label class="control-label col-sm-2">Ville *</label>
+                    <div class="col-sm-4 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-flag"></i>
+                                </span>
+                            </div>
+                            <input formControlName="city" placeholder="Ville" class="form-control" type="text">
+                        </div>
+                        <div *ngIf="user.get('adresse').get('city').errors && user.get('adresse').get('city').touched"
+                            class="alert alert-danger m-t-10">
+                            <div [hidden]="!user.get('adresse').get('city').hasError('required')">La ville est requise
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">Code APE</label>
+                <div class="col-sm-10 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-th-list"></i>
+                            </span>
+                        </div>
+                        <!-- <select class="form-control" formControlName="codeAPE">
+                <option *ngFor="let code of listCodeApe" value="{{code.codeApe}}">{{code.codeApe}} - {{code.libelleApe}}</option>
+              </select> -->
+                        <ng-select [virtualScroll]="true" [items]="listCodeApe | async" [multiple]="false"
+                            [closeOnSelect]="true" bindLabel="libelleApe" bindValue="codeApe"
+                            placeholder="Selectionnez un code APE" formControlName="codeAPE">
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.libelleApe}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">Code CPV</label>
+                <div class="col-sm-10 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-th-list"></i>
+                            </span>
+                        </div>
+                        <ng-select [virtualScroll]="true" [items]="listCodeCpv | async" [multiple]="true"
+                            [closeOnSelect]="false" bindLabel="libelleCpv" bindValue="codeCpv"
+                            placeholder="Selectionnez des codes CPV" formControlName="codeCPV">
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.libelleCpv}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">Logo</label>
+                <div class="col-sm-10 ">
+                    <div class="input-group">
+                        <input type="file" class="form-control-file" (change)="selectLogo($event)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2">Site institutionnel</label>
+                <div class="col-sm-10 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-globe"></i>
+                            </span>
+                        </div>
+                        <input formControlName="siteInstitutionnel" placeholder="Lien vers le site institutionnel"
+                            class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border">Contact</legend>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Nom *</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                            </div>
+                            <input formControlName="nom" placeholder="Nom" class="form-control" type="text">
+                        </div>
+                        <div *ngIf="user.controls['nom'].errors && user.controls['nom'].touched"
+                            class="alert alert-danger m-t-10">
+                            <div [hidden]="!user.controls['nom'].errors.required">Le nom est requis</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Prénom *</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                                <input formControlName="prenom" placeholder="Prénom" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div *ngIf="user.controls['prenom'].errors && user.controls['prenom'].touched"
+                            class="alert alert-danger m-t-10">
+                            <div [hidden]="!user.controls['prenom'].errors.required">Le prénom est requis</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Téléphone</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-phone"></i>
+                                </span>
+                            </div>
+                            <input formControlName="telephone" placeholder="Téléphone" class="form-control" type="tel">
+                        </div>
+                        <div *ngIf="user.controls['telephone'].errors && user.controls['telephone'].touched"
+                            class="alert alert-danger">
+                            <div [hidden]="!user.controls['telephone'].errors.required">Le numéro de téléphone est
+                                requis
+                            </div>
+                            <div
+                                [hidden]="!user.controls['telephone'].errors.pattern && !user.controls['telephone'].errors.minlength && !user.controls['telephone'].errors.maxlength">
+                                Le numéro de téléphone est invalide. Format : xx xx xx xx xx
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Mobile</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-mobile"></i>
+                                </span>
+                            </div>
+                            <input formControlName="mobile" placeholder="Mobile" class="form-control" type="tel">
+                        </div>
+                        <div *ngIf="user.controls['mobile'].errors && user.controls['mobile'].touched"
+                            class="alert alert-danger">
+                            <div [hidden]="!user.controls['mobile'].errors.required">Le numéro de mobile est
+                                requis
+                            </div>
+                            <div
+                                [hidden]="!user.controls['mobile'].errors.pattern && !user.controls['mobile'].errors.minlength && !user.controls['mobile'].errors.maxlength">
+                                Le numéro de mobile est invalide. Format : xx xx xx xx xx
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Fax</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-print"></i>
+                                </span>
+                            </div>
+                            <input formControlName="fax" placeholder="Fax" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Email *</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-envelope"></i>
+                                </span>
+                            </div>
+                            <input formControlName="mail" placeholder="Email" class="form-control" type="email">
+                        </div>
+                        <div *ngIf="user.controls['mail'].errors && user.controls['mail'].touched"
+                            class="alert alert-danger m-t-10">
+                            <div [hidden]="!user.controls['mail'].errors.required">L'adresse mail est requise</div>
+                            <div [hidden]="!user.controls['mail'].errors.pattern">L'adresse mail est invalide</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Confirmation *</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                            </div>
+                            <input formControlName="confirmmail" placeholder="Confirmation de l'email"
+                                class="form-control" type="email">
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="user.controls['confirmmail'].errors && user.controls['confirmmail'].touched"
+                    class="alert alert-danger m-t-10">
+                    <div [hidden]="!user.controls['confirmmail'].errors.required">La confirmation est requise</div>
+                    <div [hidden]="!user.controls['confirmmail'].errors.invalid">Les adresses mail ne correspondent pas.
+                        Veuillez réessayez</div>
+                    <div [hidden]="!user.controls['confirmmail'].errors.pattern">L'adresse mail est invalide</div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Mot de passe *</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </div>
+                            <input formControlName="password" placeholder="Mot de passe" class="form-control"
+                                type="password">
+                        </div>
+                        <div *ngIf="user.controls['password'].errors && user.controls['password'].touched"
+                            class="alert alert-danger m-t-10">
+                            <div [hidden]="!user.controls['password'].errors.required">Le mot de passe est requis</div>
+                            <div [hidden]="!user.controls['password'].errors.minlength">Le mot de passe est composé de 8
+                                caractères</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Confirmation *</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                            </div>
+                            <input formControlName="confirmpassword" placeholder="Confirmation du mot de passe"
+                                class="form-control" type="password">
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="user.controls['confirmpassword'].errors && user.controls['confirmpassword'].touched"
+                    class="alert alert-danger m-t-10">
+                    <div [hidden]="!user.controls['confirmpassword'].errors.required">La confirmation est requise</div>
+                    <div [hidden]="!user.controls['confirmpassword'].errors.invalid">Les mots de passe ne correspondent
+                        pas. Veuillez réessayez</div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-2">Adresse physique</label>
+                    <div class="col-sm-10 ">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-home"></i>
+                                </span>
+                            </div>
+                            <input formControlName="adressePhysique" placeholder="Adresse physique du contact"
+                                class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border">Documents</legend>
+                <div *ngIf="currentFileUpload" class="progress">
+                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
+                        attr.aria-valuenow="{{uploadProgress.percentage}}" aria-valuemin="0" aria-valuemax="100"
+                        [ngStyle]="{width:uploadProgress.percentage+'%'}">
+                        {{uploadProgress.percentage}}%
+                    </div>
+                </div>
+
+                <label class="btn btn-default">
+                    <input type="file" multiple="multiple" (change)="selectFile($event)">
+                </label>
+
+                <!-- <a *ngIf="selectedFiles" class="btn btn-success" (click)="upload()">Upload</a>
+          <a *ngIf="!selectedFiles" class="btn btn-success disabled">Upload</a> -->
+            </fieldset>
+
+            <div class="text-center form-group row">
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary" [disabled]="!user.valid">
+                        Valider <span class="fa fa-send"></span>
+                    </button>
+                    <button type="reset" class="btn btn-danger">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <!--<div *ngIf="registrationSuccessful" id="successmessage" class="alert alert-success" role="alert">
+        L'inscription a été effectuée avec succès. <br/> <br/>
+        Un lien d'activation a été envoyé sur votre boite mail. <br/>
+        Vous devez activer votre compte avant de pouvoir vous connecter.
+      </div>
+
+      <div *ngIf="registrationError" id="errormessage" class="alert alert-danger" role="alert">
+        Erreur lors de l'inscription: {{ error }}
+      </div>-->
+
+        <div *ngIf="loading" class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,61 @@
+
+<div class="container mx-auto">
+    <div toastContainer></div>
+    <div id="carousel-example-multi" class="carousel slide carousel-multi-item v-2" data-ride="carousel">
+        <div class="text-center">
+            <h2>Nouveaux fournisseurs</h2>
+        </div>
+        <!--Controls-->
+        <div class="controls-top">
+        <a class="btn-floating" href="#carousel-example-multi" data-slide="prev"><i
+            class="fa fa-chevron-left"></i></a>
+        </div>
+        <div class="carousel-inner" role="listbox">
+
+            <div *ngFor="let provider of providers; let i = index" [class]="i === 0 ? 'carousel-item active' : 'carousel-item'" >
+                <div class="col-12 col-md-4">
+                    <div class="card mb-2">
+                        <img class="card-img-top" [src]="imagesUrl.get(provider.id)"  alt="">
+                        <div class="card-body">
+                            <h4 class="card-title font-weight-bold">{{provider.nomSociete}}</h4>
+                            <p class="card-text"><b>Domaine : </b> {{provider.domaine}}</p>
+                            <p class="card-text"><b>Adresse : </b> {{provider.adresse.street}}</p>
+                            <p class="card-text"><b>Téléphone : </b> {{provider.telephone}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card mb-2">
+                        <img class="card-img-top" [src]="imagesUrl.get(providers[(i+1) % providers.length].id)"  alt="">
+                        <div class="card-body">
+                            <h4 class="card-title font-weight-bold">{{providers[(i+1) % providers.length].nomSociete}}</h4>
+                            <p class="card-text"><b>Domaine : </b> {{providers[(i+1) % providers.length].domaine}}</p>
+                            <p class="card-text"><b>Adresse : </b> {{providers[(i+1) % providers.length].adresse.street}}</p>
+                            <p class="card-text"><b>Téléphone : </b> {{providers[(i+1) % providers.length].telephone}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card mb-2">
+                        <img class="card-img-top" [src]="imagesUrl.get(providers[(i+2) % providers.length].id)"  alt="">
+                        <div class="card-body">
+                            <h4 class="card-title font-weight-bold">{{providers[(i+2) % providers.length].nomSociete}}</h4>
+                            <p class="card-text"><b>Domaine : </b> {{providers[(i+2) % providers.length].domaine}}</p>
+                            <p class="card-text"><b>Adresse : </b> {{providers[(i+2) % providers.length].adresse.street}}</p>
+                            <p class="card-text"><b>Téléphone : </b> {{providers[(i+2) % providers.length].telephone}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <!--Controls-->
+        <div class="controls-top">
+        <a class="btn-floating" href="#carousel-example-multi" data-slide="next"><i
+                      class="fa fa-chevron-right"></i></a>  
+        </div>
+        <!--/.Controls-->
+
+    </div>
+
+</div>
