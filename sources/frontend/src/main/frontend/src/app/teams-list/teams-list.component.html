@@ -1,45 +1,18 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="center">
   <div class="search-div">
-    <div toastContainer></div>
-    <button mat-raised-button  (click)="onCreate()">
+    <button mat-raised-button  (click)="onCreate()" *ngIf="aj==true">
       <mat-icon>add</mat-icon>Ajouter
     </button>
-    <!--<button mat-raised-button >
-        <mat-icon>archive</mat-icon>Exporter
-    </button>-->
     <mat-form-field class="search-form-field" floatLabel="never">
       <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
-      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="onSearchClear()">
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="" (click)="onSearchClear()">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
   </div>
 
   <div class="mat-elevation-z8">
-    <mat-table #table [dataSource]="dataSource" class="team-table" matSort matSortActive="id" matSortDirection="asc">
+    <mat-table #table [dataSource]="dataSource" class="entities-table" matSort matSortActive="numSiret" matSortDirection="asc">
 
       <ng-container matColumnDef="libelle">
         <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Nom</mat-header-cell>
@@ -66,14 +39,18 @@
       <ng-container matColumnDef="edit">
         <mat-header-cell *matHeaderCellDef>Editer</mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <button mat-icon-button (click)="onEdit(row)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button (click)="onEdit(row)" *ngIf="aj==true">
+            <mat-icon>edit</mat-icon>
+          </button>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="delete">
         <mat-header-cell *matHeaderCellDef>Supprimer</mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <button mat-icon-button (click)="onDelete(row)" class="delete_icon"><mat-icon>delete_outline</mat-icon></button>
+          <button mat-icon-button (click)="onDelete(row)">
+            <mat-icon class="delete_icon">delete_outline</mat-icon>
+          </button>
         </mat-cell>
       </ng-container>
 

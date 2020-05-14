@@ -17,6 +17,8 @@ import {HttpEventType} from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {ProviderQualificationComponent} from "../provider-qualification/provider-qualification.component";
 import {MyBarChartComponent} from "../my-bar-chart/my-bar-chart.component";
+import {Segment} from "../../model/segment.model";
+import {SegmentService} from "../service/segment.service";
 
 @Component({
   selector: 'app-purchaser-form',
@@ -38,9 +40,11 @@ export class ProviderShowQualificationComponent implements OnInit {
   config : PerfectScrollbarConfigInterface = {};
   qualificationForm: FormGroup;
 
-  listProviders: any;
+  listSegments: any;
   private k: number;
   private a: number;
+
+  listFournisseurs: any;
 
   donnes_a_afficher: any;
 
@@ -48,7 +52,7 @@ export class ProviderShowQualificationComponent implements OnInit {
   private fournisseurs_nb: any;
 
 
-  constructor(private dialog: MatDialog, private providerService:ProviderService, private fb: FormBuilder, public dialogRef: MatDialogRef<ProviderShowQualificationComponent>,private toastrService: ToastrService) { }
+  constructor(private dialog: MatDialog, private segmentService:SegmentService, private providerService:ProviderService, private fb: FormBuilder, public dialogRef: MatDialogRef<ProviderShowQualificationComponent>,private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.loading = false;
@@ -56,12 +60,12 @@ export class ProviderShowQualificationComponent implements OnInit {
 
 
     this.qualificationForm = this.fb.group({
-      fournisseurs: ['', Validators.required],
+      segments: ['', Validators.required],
     });
 
-    this.listProviders = this.providerService.getQualifiedProviders().pipe(map(result => {
+    this.listSegments = this.segmentService.getQualifiedSegments().pipe(map(result => {
       const items = <any[]>result;
-      items.forEach(item => item.libelleProviders = item.nomSociete);
+      items.forEach(item => item.libelleSegments = item.libelle);
       return items;
     }));
 
@@ -69,8 +73,50 @@ export class ProviderShowQualificationComponent implements OnInit {
 
   onSubmit({value, valid}: {value: Qualification, valid: boolean}) {
 
+
     // @ts-ignore
-    this.fournisseurs_nb = value.fournisseurs;
+    let id_seg = value.segments;
+
+    this.error = "";
+    this.registrationError = false;
+    this.registrationSuccessful = false;
+    this.loading = true;
+    console.log("avant submit");
+
+    this.liste_frs = new Array<number>();
+
+    this.providerService.getProviderByIdSegment(id_seg).subscribe(
+      event => {
+        if (event.type === HttpEventType.Response) {
+          let data:any = event.body;
+          if (data.status === "OK") {
+            this.listFournisseurs = JSON.parse(data.message);
+
+            this.providerService.getQualifications(this.listFournisseurs).subscribe(
+              event => {
+                if (event.type === HttpEventType.Response) {
+                  let data:any = event.body;
+
+                  if (data.status === "OK") {
+                    this.donnes_a_afficher = JSON.parse(data.message);
+                    this.showGraphique(this.donnes_a_afficher);
+                  } else {
+                    this.error = data.message;
+                    this.registrationError = true
+                    this.showToastErrorMessage("Aucun fournisseur qualifié n'est associé à ce segment : " + this.error, "Récupération qualification");
+                  }
+                }
+              });
+          } else {
+            this.error = data.message;
+            this.registrationError = true
+            this.showToastErrorMessage("Aucun fournisseur qualifié n'est associé à ce segment : " + this.error, "Récupération qualification");
+          }
+        }
+      });
+
+    /*
+    this.fournisseurs_nb;
 
     this.error = "";
     this.registrationError = false;
@@ -101,6 +147,8 @@ export class ProviderShowQualificationComponent implements OnInit {
           }
         }
       });
+
+     */
   }
 
   showGraphique(donnees) {

@@ -232,6 +232,52 @@ public class FournisseurController {
 	}
 
 
+	@PostMapping("/byIdSegment")
+	@ResponseBody
+	public String listFournisseurCPVByIdSeg(@RequestParam List<Long> liste_id) throws com.fasterxml.jackson.core.JsonProcessingException {
+		try {
+			List<Fournisseur> fournisseurs = IterableToList.toList(fournisseurRepository.findAll());
+
+			List<Long> fr = new ArrayList<Long>();
+
+			for (Long a : liste_id) {
+				Segment s = segmentRepository.findOne(a);
+
+				if (s == null) {
+					return objectMapper.writeValueAsString(
+							new ApiResponse(HttpStatus.BAD_REQUEST,
+									"Segment don't exists")
+					);
+				}
+
+				String codecpv = s.getCodeCPV();
+
+				if (fournisseurs == null) {
+					return objectMapper.writeValueAsString(
+							new ApiResponse(HttpStatus.BAD_REQUEST,
+									"Any providers with CodeCPV " + codecpv + " exist")
+					);
+				}
+
+				for (Fournisseur fournisseur : fournisseurs) {
+					if (fournisseur.containsCpv(codecpv) && !fr.contains(fournisseur.getId())) {
+						if (fournisseur.getQualification() != null) {
+							System.out.println("le fournisser " + fournisseur.getNom());
+							fr.add(fournisseur.getId());
+						}
+					}
+				}
+			}
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.OK,
+							objectMapper.writeValueAsString(fr))
+			);
+		}
+		catch (Exception ex) {
+			return "Error getting providers by CPV: " + ex.toString();
+		}
+	}
+
 
 	@PostMapping("/getQualifs")
 	@ResponseBody
@@ -581,6 +627,7 @@ public class FournisseurController {
 		try {
 			List<Fournisseur> fournisseurs = fournisseurRepository.findByCodeCPVContaining(codecpv);
 
+
 			if (fournisseurs == null) {
 				return objectMapper.writeValueAsString(
 						new ApiResponse(HttpStatus.BAD_REQUEST,
@@ -618,6 +665,9 @@ public class FournisseurController {
 				}
 				
 			}
+			System.out.print("\n11111111111111111\n");
+			System.out.print(objectMapper.writeValueAsString(fr));
+			System.out.print("\n11111111111111111\n");
 
 			return objectMapper.writeValueAsString(
 					new ApiResponse(HttpStatus.OK,
@@ -628,6 +678,7 @@ public class FournisseurController {
 			return "Error getting providers by CPV: " + ex.toString();
 		}
 	}
+
 
 	/*
 	 * Exemple : http://localhost:8080/fournisseur/byAPE?codeape=0123Z
@@ -878,6 +929,9 @@ public class FournisseurController {
 
 	@Autowired
 	private QualificationRepository qualificationRepository;
+
+	@Autowired
+	private SegmentRepository segmentRepository;
 
 	@Autowired
 	StorageService storageService;

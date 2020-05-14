@@ -12,6 +12,8 @@ import {map} from "rxjs/operators";
 import {PurchaserService} from "../service/purchaser.service";
 import {EntityService} from "../service/entity.service";
 import {validate} from "codelyzer/walkerFactory/walkerFn";
+import {AuthService} from "../core/auth/auth.service";
+import {AdminEntityService} from "../service/admin-entity.service";
 
 @Component({
   selector: 'app-team-form',
@@ -34,9 +36,10 @@ export class TeamFormComponent implements OnInit {
   listEntite: any;
   listPurchasers: any;
   private action: string;
+  entite: any;
 
   constructor(private teamService:TeamService, private fb: FormBuilder, public dialogRef: MatDialogRef<TeamFormComponent>,private toastrService: ToastrService,
-              public serviceAcheteur: PurchaserService, public serviceEntite: EntityService) { }
+              public serviceAcheteur: PurchaserService, public adminEntityService: AdminEntityService, public serviceEntite: EntityService, public authService: AuthService) { }
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -60,13 +63,13 @@ export class TeamFormComponent implements OnInit {
       this.teamForm = this.fb.group({
         libelle: [''],
         responsable: [null],
-        entite: [null],
+        //entite: [null]
       });
     } else {
       this.teamForm = this.fb.group({
         libelle: ['', Validators.required],
         responsable: [null, Validators.required],
-        entite: [null, Validators.required],
+        //entite: [null, Validators.required],
         membres: [null]
       });
     }
@@ -76,29 +79,35 @@ export class TeamFormComponent implements OnInit {
       this.teamForm.setValue({
         libelle: this.team.libelle,
         responsable: this.team.responsable,
-        entite: this.team.entite
+        //entite: this.team.entite
       });
     }
     this.listResp = this.serviceAcheteur.getFreePurchaser().pipe(map(result => {
       const items = <any[]>result;
-      items.forEach(item => item.libelleResp = item.nom + " - " + item.prenom);
+      items.forEach(item => item.libelleResp = item.nom + "  " + item.prenom);
       return items;
     }));
 
+    /*
     this.listEntite = this.serviceEntite.getEntities().pipe(map(result => {
       const items = <any[]>result;
       items.forEach(item => item.libelleEntite = item.nomSociete + " - " + item.numSiret);
       return items;
     }));
 
+     */
+
     this.listPurchasers = this.serviceAcheteur.getFreePurchaser().pipe(map(result => {
       const items = <any[]>result;
-      items.forEach(item => item.libellePurchasers = item.nom + " - " + item.prenom);
+      items.forEach(item => item.libellePurchasers = item.nom + "  " + item.prenom);
       return items;
     }));
+
+    console.log(this.authService.getCurrentUser().id);
   }
 
   onSubmit({value}: {value: Team}) {
+    //console.log("auth--"+this.authService.getCurrentUser().id);
 
     console.log(value);
     this.error = "";
@@ -107,7 +116,8 @@ export class TeamFormComponent implements OnInit {
     this.loading = true;
     console.log("avant submit");
     if (this.team.id == null) {
-      this.teamService.save(value)
+
+      this.teamService.add(value)
         .subscribe(res => {
           this.loading = false;
           console.log("Service data:");
@@ -134,8 +144,8 @@ export class TeamFormComponent implements OnInit {
         });
     } else {
       // @ts-ignore
-      if ((value.libelle != "" && value.libelle != this.team.libelle) || (value.responsable.id != this.team.responsable.id) || (value.entite != this.team.entite && value.entite != null)) {
-        console.log("modifying:");
+      if ((value.libelle != "" && value.libelle != this.team.libelle) || (value.responsable.id != this.team.responsable.id)) {
+        console.log("modifyinggggg:");
         value.id = this.team.id;
 
         if (value.libelle == "") {
@@ -144,15 +154,15 @@ export class TeamFormComponent implements OnInit {
 
         // @ts-ignore
         if (value.responsable.id == this.team.responsable.id) {
-          // @ts-ignore
-          value.responsable = this.team.responsable.id;
+          value.responsable = null;
+          
         }
 
         if (value.entite == null) {
           value.entite = this.team.entite;
         }
 
-        this.teamService.updateTeam(value, this.team.id)
+        this.teamService.update(value, this.team.id)
           .subscribe(res => {
             this.loading = false;
             console.log("teamService data edited:");

@@ -17,7 +17,7 @@ export class EntityService {
   //private serviceUrl = "../../assets/entities.json";
 
   constructor(private http: HttpClient) {
-    
+
   }
 
   save(entity: Entity) {
@@ -49,18 +49,26 @@ export class EntityService {
   }
 
   getTeams() {
+    /*
     let formdata: FormData = new FormData();
 
     let user = JSON.parse(new UserStorage().getUser());
 
     formdata.append('mail', user.mail);
-
     const req = new HttpRequest('POST', this.serviceUrl + "/teams", formdata, {
       reportProgress: true,
       responseType: 'json'
     });
 
+    console.log(this.http.request(req));
     return this.http.request(req);
+
+     */
+    let user = JSON.parse(new UserStorage().getUser());
+    let mailTab = user.mail.split(".");
+    return this.http.post(this.serviceUrl + "/teams/" + mailTab , {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
   }
 
   updateEntity(entity: Entity): Observable<Entity> {
@@ -85,11 +93,11 @@ export class EntityService {
   }
 
   getDocument() {
-    
+
     const req = new HttpRequest('GET', this.serviceUrl + '/export', {
       responseType: "blob"
     });
-  
+
     return this.http.request(req)
   }
 

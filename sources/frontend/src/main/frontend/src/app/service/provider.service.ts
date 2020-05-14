@@ -94,6 +94,19 @@ export class ProviderService {
 
     return this.http.request(req);
   }
+  getProviderByIdSegment(liste_id){
+    let formdata: FormData = new FormData();
+
+    formdata.append('liste_id', liste_id);
+
+    const req = new HttpRequest('POST', UrlConfig.API_URL + '/api/providers/byIdSegment', formdata, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+
+  }
 
   getProvidersFile() {
 
@@ -122,5 +135,7 @@ export class ProviderService {
   getProviderByCpv(cpv: string){
     return this.http.get<Provider[]>(this.allProvidersUrl +'/byCpv/'+cpv);
   }
+
+
 
 }

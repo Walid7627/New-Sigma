@@ -1,5 +1,6 @@
 package com.sigma.controller;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,35 +27,56 @@ public class EquipeController {
 	@ResponseBody
 	public String list() throws com.fasterxml.jackson.core.JsonProcessingException {
 		try {
-			List<Equipe> teams = IterableToList.toList(equipeRepository.findAll());
-			return objectMapper.writeValueAsString(teams);
+			List<Equipe> equipes = IterableToList.toList(equipeRepository.findAll());
+			if (equipes.size() == 0) {
+				System.out.print(objectMapper.writeValueAsString(equipes));
+				return objectMapper.writeValueAsString(equipes);
+			}
+
+			String s = "[";
+			for (Equipe eq : equipes) {
+				s = s + objectMapper.writeValueAsString(eq) + ",";
+			}
+			s = s.substring(0, s.length() - 1);
+			s = s + "]";
+
+			//System.out.print(objectMapper.writeValueAsString(equipes));
+
+			return s;
 		} catch (Exception ex) {
 			return objectMapper.writeValueAsString(
 					new ApiResponse(HttpStatus.BAD_REQUEST,
 							"Unable to find teams",
 							ex)
-					);
+			);
 		}
 	}
 
 	/**
 	 * POST /create  --> Create a new team and save it in the database.
 	 */
-	@PostMapping
+	@PostMapping("/create/{mail}")
 	@ResponseBody
-	public String create(@RequestBody EquipeDto equipe) throws com.fasterxml.jackson.core.JsonProcessingException {
+	public String create(@PathVariable List<String> mail, @RequestBody EquipeDto equipe) throws com.fasterxml.jackson.core.JsonProcessingException {
 		try {
-			Acheteur ach = acheteurRepository.findOne(equipe.getResponsable());
-			Entite en = entiteRepository.findById(equipe.getEntity());
-			List<Acheteur> liste = new ArrayList<Acheteur>();
-			for (Long ache: equipe.getMembres()) {
-				Acheteur a = acheteurRepository.findOne(ache);
-				if (a.getId() != ach.getId()) {
-					a.setEntite(en);
-					liste.add(a);
-				}
+			String adminEmail = "";
+			for (String s : mail) {
+				adminEmail = adminEmail + "." + s;
 			}
+			adminEmail = adminEmail.substring(1);
+			Acheteur ach = acheteurRepository.findOne(equipe.getResponsable());
+			Entite en = administrateurEntiteRepository.findByMail(adminEmail).getEntite();
+			List<Acheteur> liste = new ArrayList<Acheteur>();
+			if (equipe.getMembres() != null) {
+				for (Long ache : equipe.getMembres()) {
+					Acheteur a = acheteurRepository.findOne(ache);
+					if (a.getId() != ach.getId()) {
+						a.setEntite(en);
+						liste.add(a);
+					}
+				}
 
+			}
 			Equipe eq = new Equipe(equipe.getLibelle(), ach, en, liste);
 
 			eq.getResponsable().setRole(roleRepository.findByName(RoleType.ROLE_RESPONSABLE_ACHAT.toString()));
@@ -63,9 +85,12 @@ public class EquipeController {
 			Long id = equipeRepository.save(eq).getId();
 			addMember(id, eq.getResponsable().getId());
 			eq.getResponsable().setEquipe(equipeRepository.findById(id));
-			for (Long acheteur: equipe.getMembres()) {
-				addMember(id, acheteur);
+			if (equipe.getMembres() != null) {
+				for (Long acheteur : equipe.getMembres()) {
+					addMember(id, acheteur);
+				}
 			}
+
 
 		} catch (Exception ex) {
             return objectMapper.writeValueAsString(
@@ -123,23 +148,13 @@ public class EquipeController {
 	@ResponseBody
 	public String update(@PathVariable Long id, @RequestBody EquipeDto equipe) throws com.fasterxml.jackson.core.JsonProcessingException {
 		try {
+			System.out.print("\n\n11111111111 equipe_id:"+id+" new_resp"+equipe.getResponsable()+"  new_entite"+equipe.getEntity());
 			Equipe eq = equipeRepository.findById(id);
 			if (equipe.getLibelle() != null) {
 				eq.setLibelle(equipe.getLibelle());
 			}
-			if (equipe.getEntity() != eq.getEntite().getId()) {
-				Entite en = entiteRepository.findById(equipe.getEntity());
 
-				eq.setEntite(en);
-
-				for (Acheteur a : eq.getMembres()) {
-					a.setEntite(en);
-					acheteurRepository.save(a);
-				}
-				eq.getResponsable().setEntite(en);
-				acheteurRepository.save(eq.getResponsable());
-			}
-			if (equipe.getResponsable() != eq.getResponsable().getId()) {
+			if (equipe.getResponsable() != eq.getResponsable().getId() && equipe.getResponsable() != null) {
 				Acheteur ra = acheteurRepository.findOne(equipe.getResponsable());
 				ra.setRole(roleRepository.findByName(RoleType.ROLE_RESPONSABLE_ACHAT.toString()));
 				ra.setEntite(eq.getEntite());
@@ -149,7 +164,7 @@ public class EquipeController {
 				Acheteur resp = acheteurRepository.findOne(eq.getResponsable().getId());
 				resp.setRole(roleRepository.findByName(RoleType.ROLE_ACHETEUR.toString()));
 				resp.setEquipe(null);
-				resp.setEntite(null);
+				//resp.setEntite(null);
 				acheteurRepository.save(resp);
 
 				eq.setResponsable(ra);
@@ -225,7 +240,7 @@ public class EquipeController {
 			Equipe eq = equipeRepository.findById(id);
 			Acheteur a = acheteurRepository.findOne(acheteur_id);
 			a.setEquipe(null);
-			a.setEntite(null);
+			//a.setEntite(null);
 			acheteurRepository.save(a);
             equipeRepository.save(eq);
 
@@ -256,7 +271,7 @@ public class EquipeController {
 				);
 			}
 			a.setEquipe(null);
-			a.setEntite(null);
+			//a.setEntite(null);
 
 			acheteurRepository.save(a);
 			equipeRepository.save(eq);
@@ -362,6 +377,9 @@ public class EquipeController {
 
 	@Autowired
 	private AcheteurRepository acheteurRepository;
+
+	@Autowired
+	private AdministrateurEntiteRepository administrateurEntiteRepository;
 
 	@Autowired
 	private ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);

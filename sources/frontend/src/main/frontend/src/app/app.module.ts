@@ -86,7 +86,7 @@ import { NewPasswordComponent } from './new-password/new-password.component';
 import {CarouselModule, WavesModule, MDBBootstrapModule} from 'angular-bootstrap-md'
 import { PurchaserListComponent } from './purchaser-list/purchaser-list.component';
 import { PurchaserService } from './service/purchaser.service';
-import { TeamListComponent } from './teams-list/teams-list.component';
+import { TeamsListComponent } from './teams-list/teams-list.component';
 import { TeamFormComponent } from './teams-form/team-form.component';
 import {TeamPurchaserComponent} from "./teams-purchaser/team-purchaser.component";
 import { SegmentsListComponent } from './segments-list/segments-list.component';
@@ -123,7 +123,7 @@ const appRoutes: Routes = [
   { path: 'profil', component: ProfileProviderComponent},
   { path: 'new_password/:mail', component: NewPasswordComponent},
   { path: 'purchasers', component: PurchaserListComponent},
-  { path: 'teams', component: TeamListComponent},
+  { path: 'teams', component: TeamsListComponent},
   { path: 'segments', component: SegmentsListComponent},
   { path: 'visiteurs', component: VisiteursListComponent},
 
@@ -157,7 +157,7 @@ const appRoutes: Routes = [
     AdminsEntityFormComponent,
     ProviderContactComponent,
     PurchaserListComponent,
-    TeamListComponent,
+    TeamsListComponent,
     TeamFormComponent,
     TeamPurchaserComponent,
     SegmentsListComponent,

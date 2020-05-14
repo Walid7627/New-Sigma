@@ -46,6 +46,22 @@ public class SegmentController {
         }
     }
 
+    @GetMapping("/qualified")
+    @ResponseBody
+    public String list_qualified() throws com.fasterxml.jackson.core.JsonProcessingException {
+        try {
+            List<Segment> users = IterableToList.toList(segmentRepository.findAll());
+
+            return objectMapper.writeValueAsString(users);
+        } catch (Exception ex) {
+          return objectMapper.writeValueAsString(
+            new ApiResponse(HttpStatus.BAD_REQUEST,
+                            "Unable to find users",
+                            ex)
+          );
+        }
+    }
+
     /**
      * POT /create  --> Create a new user and save it in the database.
      */

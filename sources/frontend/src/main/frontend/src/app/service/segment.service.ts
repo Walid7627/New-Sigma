@@ -5,6 +5,7 @@ import { UrlConfig } from '../core/config/url-config';
 import 'rxjs/add/operator/map';
 import { Segment } from '../../model/segment.model';
 import { Observable } from 'rxjs/Observable';
+import {Provider} from "../../model/provider.model";
 
 @Injectable()
 export class SegmentService {
@@ -25,8 +26,6 @@ export class SegmentService {
     });
   }
 
-  
-
   updateSegment(Segment: Segment ): Observable<Segment> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     console.log(JSON.stringify(Segment));
@@ -36,11 +35,13 @@ export class SegmentService {
   getAllSegment() {
     return this.http.get<Segment[]>(this.getSegmentUrl);
   }
-  
+
   deleteSegment(id: number): Observable<Segment>{
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.get<Segment>(this.allSegmentUrl+ "/delete/" + id, { headers: headers });
   }
 
-  
+  getQualifiedSegments() {
+    return this.http.get<Segment[]>(this.allSegmentUrl + "/qualified");
+  }
 }

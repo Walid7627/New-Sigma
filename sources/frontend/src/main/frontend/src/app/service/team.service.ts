@@ -7,6 +7,7 @@ import { Team } from '../../model/team.model';
 import { Observable } from 'rxjs/Observable';
 import {log} from "util";
 import {Purchaser} from "../../model/purchaser.model";
+import { UserStorage } from '../core/userstorage/user.storage';
 
 @Injectable()
 export class TeamService {
@@ -15,23 +16,22 @@ export class TeamService {
 
   constructor(private http: HttpClient) { }
 
-  save(team: Team) {
-    return this.http.post(this.allTeamUrl, JSON.stringify(team), {
+  add(team: Team) {
+
+    let user = JSON.parse(new UserStorage().getUser());
+    let mailTab = user.mail.split(".");
+    return this.http.post(this.allTeamUrl + "/create/" + mailTab , JSON.stringify(team), {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
   }
 
-  updateTeam(Team: Team, id: number) {
+  update(Team: Team, id: number) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post(this.allTeamUrl + "/update/" + id, JSON.stringify(Team), { headers: headers });
   }
 
-  getAllPurchasers(id: number) {
-    return this.http.get<Purchaser[]>(this.allTeamUrl + '/members/' + id);
-  }
-
   getAllTeam() {
-    return this.http.get<Team[]>(this.allTeamUrl);
+    return this.http.get<any[]>(this.allTeamUrl);
   }
 
   deleteAdmin(id: number): Observable<Team> {
