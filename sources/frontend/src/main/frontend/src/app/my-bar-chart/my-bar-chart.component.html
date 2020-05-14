@@ -1,0 +1,18 @@
+<div>
+  <div class="container-fluid">
+    <mat-toolbar class="col-sm-12">
+      <legend class="text-center"><strong>Qualification des Fournisseurs selectionnés</strong></legend>
+      <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+        class="material-icons">close</i></button>
+
+    </mat-toolbar>
+  </div>
+  <div id="chart">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+    ></apx-chart>
+  </div>
+</div>

@@ -1,6 +1,9 @@
 package com.sigma.service.impl;
 
 import com.sigma.dto.UtilisateurDto;
+import com.sigma.model.Fournisseur;
+import com.sigma.model.Qualification;
+import com.sigma.repository.FournisseurRepository;
 import com.sigma.service.UserService;
 import com.sigma.utilisateur.Utilisateur;
 import com.sigma.utilisateur.UtilisateurRepository;
@@ -24,6 +27,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private UtilisateurRepository userDao;
 
     @Autowired
+    private FournisseurRepository four;
+
+    @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -42,6 +48,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         List<Utilisateur> list = new ArrayList<>();
         userDao.findAll().iterator().forEachRemaining(list::add);
         return list;
+    }
+
+    public void addQualif(long id, Qualification q) {
+        if (q == null) {
+            throw new AssertionError();
+        }
+        Fournisseur f = four.findOne(id);
+        f.setQualification(q);
+        four.save(f);
     }
 
     @Override

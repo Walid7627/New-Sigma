@@ -1,6 +1,7 @@
 package com.sigma.service;
 
 import com.sigma.dto.UtilisateurDto;
+import com.sigma.model.Qualification;
 import com.sigma.utilisateur.Utilisateur;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface UserService {
     Utilisateur findOne(String mail);
 
     Utilisateur findById(Long id);
+
+    public void addQualif(long id, Qualification q);
+
 }

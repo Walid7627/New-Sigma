@@ -35,10 +35,14 @@ export class ProviderService {
     return this.http.get<Provider[]>(this.allMotherCompanyUrl);
   }
 
+  getQualifiedProviders() {
+    return this.http.get<Provider[]>(this.allProvidersUrl + "/qualified");
+  }
+
   getProviderByName(name: string) {
 
     let requestParams = {
-      nomSociete: name 
+      nomSociete: name
     };
 
     return this.http.post(this.searchUrl, requestParams);
@@ -55,12 +59,48 @@ export class ProviderService {
     });
   }
 
+  addQualification(qualif, provider: number) {
+    return this.http.post(UrlConfig.API_URL + "/api/providers/qualif/" + provider , JSON.stringify(qualif), {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
+  }
+
+  removeQualification(id: number) {
+    return this.http.get(this.allProvidersUrl + "/deleteQualif/" + id);
+  }
+
+  getQualification(id) {
+    let formdata: FormData = new FormData();
+
+    formdata.append('id', id);
+
+    const req = new HttpRequest('POST', UrlConfig.API_URL + '/api/providers/getQualif', formdata, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+
+  getQualifications(liste_id) {
+    let formdata: FormData = new FormData();
+
+    formdata.append('liste_id', liste_id);
+
+    const req = new HttpRequest('POST', UrlConfig.API_URL + '/api/providers/getQualifs', formdata, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+
   getProvidersFile() {
-    
+
     const req = new HttpRequest('GET', this.exportUrl, {
       responseType: "blob"
     });
-  
+
     return this.http.request(req)
   }
 
@@ -76,7 +116,7 @@ export class ProviderService {
     const req = new HttpRequest('POST', UrlConfig.API_URL + '/api/files/logo', formdata, {
       responseType: "blob"
     });
-  
+
     return this.http.request(req)
   }
   getProviderByCpv(cpv: string){

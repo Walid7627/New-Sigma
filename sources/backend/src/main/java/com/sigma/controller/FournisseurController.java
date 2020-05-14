@@ -13,6 +13,10 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sigma.dto.QualificationDto;
+import com.sigma.model.*;
+import com.sigma.repository.*;
+import com.sigma.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,18 +35,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sigma.config.JwtTokenUtil;
 import com.sigma.dto.ContactDto;
 import com.sigma.dto.FournisseurDto;
-import com.sigma.model.ApiResponse;
-import com.sigma.model.Contact;
-import com.sigma.model.Document;
-import com.sigma.model.Fournisseur;
-import com.sigma.model.FournisseurType;
-import com.sigma.model.RoleType;
-import com.sigma.model.VerificationToken;
-import com.sigma.repository.ContactRepository;
-import com.sigma.repository.DocumentRepository;
-import com.sigma.repository.FournisseurRepository;
-import com.sigma.repository.RoleRepository;
-import com.sigma.repository.VerificationTokenRepository;
 import com.sigma.service.StorageService;
 import com.sigma.service.impl.EmailServiceImpl;
 import com.sigma.service.impl.FournisseurExcelServiceImpl;
@@ -53,6 +45,9 @@ import com.sigma.utilisateur.UtilisateurRepository;
 @Controller
 @RequestMapping("/api/providers")
 public class FournisseurController {
+
+	@Autowired
+	UserService u;
 
 	@GetMapping
 	@ResponseBody
@@ -66,6 +61,27 @@ public class FournisseurController {
 							"Unable to find users",
 							ex)
 					);
+		}
+	}
+
+	@GetMapping("/qualified")
+	@ResponseBody
+	public String list_with_qualification() throws com.fasterxml.jackson.core.JsonProcessingException {
+		try {
+			List<Fournisseur> users = IterableToList.toList(fournisseurRepository.findAll());
+			List<Fournisseur> users_qualified = new ArrayList<>();
+			for (Fournisseur f : users) {
+				if (f.getQualification() != null) {
+					users_qualified.add(f);
+				}
+			}
+			return objectMapper.writeValueAsString(users_qualified);
+		} catch (Exception ex) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.BAD_REQUEST,
+							"Unable to find users",
+							ex)
+			);
 		}
 	}
 	
@@ -84,6 +100,211 @@ public class FournisseurController {
 							ex)
 					);
 		}
+	}
+
+
+	@PostMapping("/qualif/{fournisseur}")
+	@ResponseBody
+	public String qualif(@PathVariable Long fournisseur, @RequestBody QualificationDto qualification) throws com.fasterxml.jackson.core.JsonProcessingException {
+		try {
+			System.out.print("\n-------------------------------------\n");
+			System.out.print(objectMapper.writeValueAsString(qualification));
+			System.out.print("\n-------------------------------------\n");
+
+			Fournisseur f = fournisseurRepository.findOne(fournisseur);
+			if (f == null) {
+				return objectMapper.writeValueAsString(
+						new ApiResponse(HttpStatus.NOT_FOUND,
+								objectMapper.writeValueAsString(f))
+				);
+			}
+
+			Qualification qualif = f.getQualification();
+
+			if (qualif == null) {
+
+				Qualification q = new Qualification(qualification.getCa1(), qualification.getCa2(), qualification.getCa3(),
+						qualification.getEbe1(), qualification.getEbe2(), qualification.getEbe3(), qualification.getRn1(),
+						qualification.getRn2(), qualification.getRn3(), qualification.getCp1(), qualification.getCp2(), qualification.getCp3(),
+						qualification.getVa1(), qualification.getVa2(), qualification.getVa3(), qualification.getCs());
+
+
+				u.addQualif(fournisseur, q);
+
+			} else {
+
+				if (qualification.getCs() != qualif.getCs()) {
+					qualif.setCs(qualification.getCs());
+				}
+				if (qualification.getCp1() != qualif.getCp1()) {
+					qualif.setCp1(qualification.getCp1());
+				}
+				if (qualification.getCp2() != qualif.getCp2()) {
+					qualif.setCp2(qualification.getCp2());
+				}
+				if (qualification.getCp3() != qualif.getCp3()) {
+					qualif.setCp3(qualification.getCp3());
+				}
+				if (qualification.getCa1() != qualif.getCa1()) {
+					qualif.setCa1(qualification.getCa1());
+				}
+				if (qualification.getCa2() != qualif.getCa2()) {
+					qualif.setCa2(qualification.getCa2());
+				}
+				if (qualification.getCa3() != qualif.getCa3()) {
+					qualif.setCa3(qualification.getCa3());
+				}
+				if (qualification.getVa1() != qualif.getVa1()) {
+					qualif.setVa1(qualification.getVa1());
+				}
+				if (qualification.getVa2() != qualif.getVa2()) {
+					qualif.setVa2(qualification.getVa2());
+				}
+				if (qualification.getVa3() != qualif.getVa3()) {
+					qualif.setVa3(qualification.getVa3());
+				}
+				if (qualification.getEbe1() != qualif.getEbe1()) {
+					qualif.setEbe1(qualification.getEbe1());
+				}
+				if (qualification.getEbe2() != qualif.getEbe2()) {
+					qualif.setEbe2(qualification.getEbe2());
+				}
+				if ( qualification.getEbe3() != qualif.getEbe3()) {
+					qualif.setEbe3(qualification.getEbe3());
+				}
+				if (qualification.getRn1() != qualif.getRn1()) {
+					qualif.setRn1(qualification.getRn1());
+				}
+				if (qualification.getRn2() != qualif.getRn2()) {
+					qualif.setRn2(qualification.getRn2());
+				}
+				if ( qualification.getRn3() != qualif.getRn3()) {
+					qualif.setRn3(qualification.getRn3());
+				}
+
+				qualificationRepository.save(qualif);
+			}
+		} catch (Exception ex) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.BAD_REQUEST,
+							"Unable qualif provider",
+							ex)
+			);
+		}
+		return objectMapper.writeValueAsString(
+				new ApiResponse(HttpStatus.OK,
+						"qualification success")
+		);
+	}
+
+	@PostMapping("/getQualif")
+	@ResponseBody
+	public String getQualification(@RequestParam Long id) throws com.fasterxml.jackson.core.JsonProcessingException {
+		if (id == null) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.EXPECTATION_FAILED,
+							"Le paramètre 'id' n'est pas fourni")
+			);
+		}
+
+		Fournisseur f = fournisseurRepository.findOne(id);
+		if (f == null) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.NOT_FOUND,
+							objectMapper.writeValueAsString(f))
+			);
+		}
+
+		Qualification q = f.getQualification();
+
+		if (q == null) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.NOT_FOUND,
+							objectMapper.writeValueAsString(q))
+			);
+		}
+
+
+		return objectMapper.writeValueAsString(
+				new ApiResponse(HttpStatus.OK,
+						objectMapper.writeValueAsString(q))
+		);
+	}
+
+
+
+	@PostMapping("/getQualifs")
+	@ResponseBody
+	public String getQualifications(@RequestParam List<Long> liste_id) throws com.fasterxml.jackson.core.JsonProcessingException {
+		if (liste_id == null || liste_id.size() < 1) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.EXPECTATION_FAILED,
+							"Erreur lors de la sélection des fournisseurs")
+			);
+		}
+
+		String retour = "[";
+		for (Long frs : liste_id) {
+			retour += "{";
+			Fournisseur f = fournisseurRepository.findOne(frs);
+			Qualification q = f.getQualification();
+			if (q == null) {
+				return objectMapper.writeValueAsString(
+						new ApiResponse(HttpStatus.NOT_FOUND,
+								objectMapper.writeValueAsString(q))
+				);
+			}
+			String nom = f.getNomSociete();
+
+			retour +=  objectMapper.writeValueAsString("societe") + ": " + objectMapper.writeValueAsString(nom) + ", "+objectMapper.writeValueAsString("fournisseur") + ": " + frs + ", " + objectMapper.writeValueAsString("qualification") + ": " + objectMapper.writeValueAsString(q);
+			retour += "}, ";
+		}
+		retour = retour.substring(0, retour.length() - 2);
+		retour += "]";
+
+
+		return objectMapper.writeValueAsString(
+				new ApiResponse(HttpStatus.OK,
+						retour)
+		);
+	}
+
+	@GetMapping("/deleteQualif/{id}")
+	@ResponseBody
+	public String deleteQualif(@PathVariable Long id) throws com.fasterxml.jackson.core.JsonProcessingException {
+		try {
+			Fournisseur user = fournisseurRepository.findOne(id);
+
+			if (user == null) {
+				return objectMapper.writeValueAsString(
+						new ApiResponse(HttpStatus.BAD_REQUEST,
+								"Le fournisseur n'existe pas")
+				);
+			}
+
+			if (user.getQualification() == null) {
+				return objectMapper.writeValueAsString(
+						new ApiResponse(HttpStatus.BAD_REQUEST,
+								"Le fournisseur n'est pas qualifié")
+				);
+			}
+			qualificationRepository.delete(user.getQualification().getId());
+
+			user.setQualification(null);
+			fournisseurRepository.save(user);
+
+		} catch (Exception ex) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.BAD_REQUEST,
+							"Error when deleting the qualification",
+							ex)
+			);
+		}
+
+		return objectMapper.writeValueAsString(
+				new ApiResponse(HttpStatus.OK,
+						"Qualification successfully deleted")
+		);
 	}
 
 
@@ -132,7 +353,7 @@ public class FournisseurController {
 						date, fournisseur.getNumSiret(), fournisseur.getLogo(), fournisseur.getNomSociete(),
 						fournisseur.getTypeEntreprise(), fournisseur.getMaisonMere(),
 						fournisseur.getCodeAPE(), fournisseur.getCodeCPV(), fournisseur.getRaisonSociale(),
-						fournisseur.getSiteInstitutionnel(), fournisseur.getDescription(), fournisseur.getEvaluations(), fournisseur.getDocuments());
+						fournisseur.getSiteInstitutionnel(), fournisseur.getDescription(), fournisseur.getEvaluations(), fournisseur.getDocuments(), null);
 
 				usr.setRole(roleRepository.findByName(RoleType.ROLE_FOURNISSEUR.toString()));
 
@@ -654,6 +875,9 @@ public class FournisseurController {
 
 	@Autowired
 	private UtilisateurRepository utilisateurRepository;
+
+	@Autowired
+	private QualificationRepository qualificationRepository;
 
 	@Autowired
 	StorageService storageService;

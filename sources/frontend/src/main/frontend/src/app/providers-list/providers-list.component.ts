@@ -20,6 +20,8 @@ import { HttpEventType } from '@angular/common/http';
 import * as FileSaver from 'file-saver';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { RoleService } from '../core/role/role.service';
+import {ProviderQualificationComponent} from "../provider-qualification/provider-qualification.component";
+import {ProviderShowQualificationComponent} from "../provider-show-qualification/provider-show-qualification.component";
 
 
 @Component({
@@ -32,7 +34,7 @@ export class ProvidersListComponent implements OnInit {
 // propriété
   allproviders: any;
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['numSiret', 'nomSociete', 'adresse', 'edit', 'delete', 'document', 'contact'];
+  displayedColumns: string[] = ['numSiret', 'nomSociete', 'adresse', 'edit', 'delete', 'document', 'contact', 'qualification'];
   providers: Provider[];
   resultsLength = 0;
   searchKey: string;
@@ -56,7 +58,7 @@ export class ProvidersListComponent implements OnInit {
   IamNotVisiteur() {
     return (!this.roleService.canActivate("ROLE_VISITEUR"));
   }
- 
+
   onDelete(provider: Provider) {
     console.log("deleing");
     console.log(provider);
@@ -70,15 +72,15 @@ export class ProvidersListComponent implements OnInit {
               console.log("successfull");
               this.loadData();
             } else {
-              
+
               console.log("unsuccessfull");
             }
-            
+
           }, err => {
             console.log("error");
           }
         )
-        
+
       }
     });
   }
@@ -100,6 +102,33 @@ export class ProvidersListComponent implements OnInit {
     });
   }
 
+  getQualif() {
+    console.log("debut onCreate()");
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "80%";
+    const dialogRef = this.dialog.open(ProviderShowQualificationComponent,dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadData();
+      console.log('The dialog was closed');
+    });
+  }
+
+  onQualif(provider: Provider) {
+    console.log("debut onQualif()");
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "80%";
+    const dialogRef = this.dialog.open(ProviderQualificationComponent,dialogConfig);
+    dialogRef.componentInstance.provider = provider;
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.loadData();
+    });
+  }
+
   onEdit(provider: Provider) {
     console.log("debut onEdit()");
     console.log(provider.adresse);
@@ -112,7 +141,7 @@ export class ProvidersListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.loadData();
       console.log('The dialog was closed');
-      
+
     });
   }
   onEditDoc(provider: Provider) {
@@ -172,7 +201,7 @@ export class ProvidersListComponent implements OnInit {
     getDocument() {
       this.loading = true;
       this.providerService.getProvidersFile().subscribe(res => {
-          
+
           if(res.type === HttpEventType.Response) {
             let documentData: any = res;
             console.log(documentData);
@@ -189,13 +218,13 @@ export class ProvidersListComponent implements OnInit {
               console.log("error");
               this.showToastErrorMessage("Votre session doit être expirée ou vous n'avez pas les droits requis. Veuillez vous reconnecter", "Exportation de fournisseurs");
             }
-            
+
           }
-  
-        
+
+
         }
       );
-  
+
       this.loading = false;
     }
 
@@ -205,7 +234,7 @@ export class ProvidersListComponent implements OnInit {
       });
       window.scroll(0,0);
     }
-  
+
     showToastSuccessMessage(message, title) {
       this.toastrService.success(message, title, {
         timeOut: 3000,

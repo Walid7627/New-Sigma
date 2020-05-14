@@ -83,7 +83,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { ProfileProviderContactComponent } from './profile-provider/provider-contact/provider-contact.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
 
-import { CarouselModule, WavesModule, MDBBootstrapModule } from 'angular-bootstrap-md'
+import {CarouselModule, WavesModule, MDBBootstrapModule} from 'angular-bootstrap-md'
 import { PurchaserListComponent } from './purchaser-list/purchaser-list.component';
 import { PurchaserService } from './service/purchaser.service';
 import { TeamListComponent } from './teams-list/teams-list.component';
@@ -98,6 +98,14 @@ import { VisiteursListComponent } from './visiteurs-list/visiteurs-list.componen
 import { VisiteursFormComponent } from './visiteur-form/visiteur-form.component';
 import { SegmentComponent } from './segment/segment.component';
 import { ProvidersSegmentComponent } from './providers-segment/providers-segment.component';
+import {ProviderQualificationComponent} from "./provider-qualification/provider-qualification.component";
+import {ProviderShowQualificationComponent} from "./provider-show-qualification/provider-show-qualification.component";
+import {MyBarChartComponent} from "./my-bar-chart/my-bar-chart.component";
+
+import {ChartsModule} from 'ng2-charts';
+import {NgApexchartsModule} from "ng-apexcharts";
+
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -168,6 +176,9 @@ const appRoutes: Routes = [
     NewPasswordComponent,
     SegmentComponent,
     ProvidersSegmentComponent,
+    ProviderQualificationComponent,
+    ProviderShowQualificationComponent,
+    MyBarChartComponent
   ],
   imports: [
     FormsModule,
@@ -200,7 +211,9 @@ const appRoutes: Routes = [
     ToastContainerModule,
     MDBBootstrapModule.forRoot(),
     CarouselModule.forRoot(),
-    WavesModule.forRoot()
+    WavesModule.forRoot(),
+    ChartsModule,
+    NgApexchartsModule
   ],
   providers: [
     CodeCPVService,
@@ -232,7 +245,7 @@ const appRoutes: Routes = [
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     }
   ],
-  entryComponents : [PurchaserFormComponent, TeamFormComponent, TeamPurchaserComponent, EntityFormComponent, ContactUsComponent, AboutComponent, ProvidersReferenceComponent, AdminsEntityFormComponent, MatConfirmDialogComponent, EntityAffectComponent, ProviderContactComponent,ProviderDocumentsComponent,VisiteursFormComponent],
+  entryComponents : [ProviderShowQualificationComponent, ProviderQualificationComponent, PurchaserFormComponent, TeamFormComponent, TeamPurchaserComponent, EntityFormComponent, ContactUsComponent, AboutComponent, ProvidersReferenceComponent, AdminsEntityFormComponent, MatConfirmDialogComponent, EntityAffectComponent, ProviderContactComponent,ProviderDocumentsComponent,VisiteursFormComponent],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

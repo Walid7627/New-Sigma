@@ -31,6 +31,9 @@ public class Fournisseur extends Utilisateur {
   private String fax;
   // private List<Document> documents;
   // private Qualification qualifications;
+  @OneToOne(cascade = {CascadeType.ALL})
+  private Qualification qualification;
+
   @OneToMany(
   cascade = CascadeType.ALL,
   orphanRemoval = true
@@ -56,7 +59,7 @@ public class Fournisseur extends Utilisateur {
   String fax, String password, Date dateEnregistrement, String siret,
   String logo, String nomSociete, FournisseurType typeEntreprise, Long maisonMere, String codeAPE,
   List<String> codeCPV, String raisonSociale, String siteInstitutionnel,
-  String description, List<Metrique> evaluations, List<Document> documents) {
+  String description, List<Metrique> evaluations, List<Document> documents, Qualification q) {
     super(nom, prenom, mail, adresse, telephone, mobile, password, dateEnregistrement, UserType.PROVIDER);
     this.numSiret = siret;
     this.logo = logo;
@@ -72,6 +75,7 @@ public class Fournisseur extends Utilisateur {
     this.fax = fax;
     this.documents = documents;
     this.enabled = false;
+    this.qualification = q;
   }
 
   public String getNumSiret() {
@@ -181,6 +185,15 @@ public class Fournisseur extends Utilisateur {
   public void setFax(String fax) {
     this.fax = fax;
   }
+
+  public Qualification getQualification() {
+    return this.qualification;
+  }
+
+  public void setQualification(Qualification q) {
+    qualification = q;
+  }
+
 
   public Document getDocument(String name) {
     // Optional<Document> result = this.documents

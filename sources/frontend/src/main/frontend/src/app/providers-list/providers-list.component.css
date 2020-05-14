@@ -12,7 +12,7 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0%);
-    min-width: 1100px; 
+    min-width: 1100px;
 }
 
 .mat-column-nomSociete {
@@ -26,8 +26,8 @@
 }
 
 .mat-column-adresse {
-    flex: 0 0 35% !important;
-    width: 35% !important;
+    flex: 0 0 30% !important;
+    width: 30% !important;
 }
 
 .mat-column-edit, .mat-column-delete, .mat-column-document, .mat-column-contact {

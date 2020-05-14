@@ -1,0 +1,253 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<div class="container-fluid">
+  <div class="ps" style="position: relative; width: 100%; max-height: 600px;" [perfectScrollbar]="config">
+
+    <div class="container-fluid">
+      <mat-toolbar class="col-sm-10">
+        <legend class="text-center"><strong>Qualification du Fournisseur</strong></legend>
+        <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+          class="material-icons">close</i></button>
+
+      </mat-toolbar>
+
+    </div>
+    <div toastContainer></div>
+
+    <div class="container-fluid">
+
+      <form class="well form-horizontal" (ngSubmit)="onSubmit(qualificationForm)" [formGroup]="qualificationForm">
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border">Qualifier un fournisseur</legend>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Capital Social *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.cs" formControlName="cs" placeholder="Capital Social" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Capital Propre N-1 *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.cp1" formControlName="cp1" placeholder="Capital Propre N-1" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Capital Propre N-2</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.cp2" formControlName="cp2" placeholder="Capital Propre N-2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Capital Propre N-3</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.cp3" formControlName="cp3" placeholder="Capital Propre N-3" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+            <div class="form-group row">
+            <label class="control-label col-sm-2">Chiffre d'affaire N-1 *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ca1" formControlName="ca1" placeholder="Chiffre d'affaire N-1" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Chiffre d'affaire N-2</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ca2" formControlName="ca2" placeholder="Chiffre d'affaire N-2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Chiffre d'affaire N-3</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ca3" formControlName="ca3" placeholder="Chiffre d'affaire N-3" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Valeur Ajouté N-1</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.va1" formControlName="va1" placeholder="Valeur Ajouté N-1" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Valeur Ajouté N-2</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.va2" formControlName="va2" placeholder="Valeur Ajouté N-2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Valeur Ajouté N-3</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.va3" formControlName="va3" placeholder="Valeur Ajouté N-3" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">EBE N-1 *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ebe1" formControlName="ebe1" placeholder="EBE N-1" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">EBE N-2</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ebe2" formControlName="ebe2" placeholder="EBE N-2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">EBE N-3</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ebe3" formControlName="ebe3" placeholder="EBE N-3" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Résultat Net N-1</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.rn1" formControlName="rn1" placeholder="Résultat Net N-1" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Résultat Net N-2</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.rn2" formControlName="rn2" placeholder="Résultat Net N-2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Résultat Net N-3</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.rn3" formControlName="rn3" placeholder="Résultat Net N-3" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+        <div class="text-center form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary" [disabled]="!qualificationForm.valid">
+              Ajouter<span class="fa fa-send"></span>
+            </button>
+            <!-- <button type="button" class="btn btn-info">
+              Consulter
+            </button> -->
+            <button type="reset" class="btn btn-danger">
+              Réinitialiser
+            </button>
+            <button type="reset" (click)="delete()" class="btn btn-danger" [disabled]="!qualification.id">
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
