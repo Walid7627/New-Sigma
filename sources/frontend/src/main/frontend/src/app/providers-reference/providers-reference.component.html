@@ -64,7 +64,7 @@
                                 <div class="input-group-prepend"> <span class="input-group-text">
                                         <i class="fa fa-home"></i>
                                     </span> </div>
-                                <input formControlName="nomSociete" placeholder="Nom de l'entreprise"
+                                <input #nomSociete  formControlName="nomSociete" placeholder="Nom de l'entreprise"
                                     class="form-control" type="text">
                             </div>
                             <div *ngIf="user.controls['nomSociete'].errors && user.controls['nomSociete'].touched"
@@ -223,14 +223,14 @@
                         <label class="control-label col-sm-2 my-auto">Logo</label>
                         <div class="col-sm-6 my-auto">
                             <div class="input-group">
-                                <input type="file" class="form-control-file" (change)="selectLogo($event)">
+                                <button  type="button" mat-raised-button  (click)="onCreate(nomSociete.value)">
+                                    <mat-icon>add</mat-icon>Ajouter
+                                </button>
                             </div>
                         </div>
-                        <div class="col-sm-4 my-auto text-right">
-                            <img *ngIf="logoPreview" [src]="domSanitizer.bypassSecurityTrustUrl(logoPreview)"
-                                class="center-img" height="125" width="125" alt=""> <br>
+                        <div class="col-sm-4 my-auto text-left" >
+                            {{logo}}
                         </div>
-
                     </div>
 
                     <div class="form-group row">

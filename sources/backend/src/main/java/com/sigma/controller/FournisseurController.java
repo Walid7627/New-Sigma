@@ -3,25 +3,44 @@ package com.sigma.controller;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sigma.dto.QualificationDto;
-import com.sigma.model.*;
-import com.sigma.repository.*;
-import com.sigma.service.UserService;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,18 +48,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sigma.config.JwtTokenUtil;
 import com.sigma.dto.ContactDto;
 import com.sigma.dto.FournisseurDto;
+import com.sigma.model.ApiResponse;
+import com.sigma.model.Contact;
+import com.sigma.model.Document;
+import com.sigma.model.Fournisseur;
+import com.sigma.model.FournisseurType;
+import com.sigma.model.RoleType;
+import com.sigma.model.VerificationToken;
+import com.sigma.repository.ContactRepository;
+import com.sigma.repository.DocumentRepository;
+import com.sigma.repository.FournisseurRepository;
+import com.sigma.repository.RoleRepository;
+import com.sigma.repository.VerificationTokenRepository;
 import com.sigma.service.StorageService;
 import com.sigma.service.impl.EmailServiceImpl;
 import com.sigma.service.impl.FournisseurExcelServiceImpl;
 import com.sigma.util.IterableToList;
 import com.sigma.utilisateur.Utilisateur;
 import com.sigma.utilisateur.UtilisateurRepository;
+import com.sigma.dto.QualificationDto;
+import com.sigma.model.*;
+import com.sigma.repository.*;
+import com.sigma.service.UserService;
 
 @Controller
 @RequestMapping("/api/providers")
@@ -403,7 +441,14 @@ public class FournisseurController {
 
 				usr.setRole(roleRepository.findByName(RoleType.ROLE_FOURNISSEUR.toString()));
 
-
+				// for Downloading logo 
+				/*fournisseurRepository.save(usr);
+				String logoUrl=fournisseur.getLogo();
+				String logoName=fournisseur.getNomSociete()+""+usr.getId();
+				usr.setLogo(logoName+".png");
+				this.imageSave(logoUrl, logoName);*/
+				
+				
 				fournisseurRepository.save(usr);
 				usr = fournisseurRepository.findByMail(usr.getMail());
 			
@@ -523,6 +568,12 @@ public class FournisseurController {
 			user.setMaisonMere(fournisseur.getMaisonMere());
 			user.setFax(fournisseur.getFax());
 			user.setMobile(fournisseur.getMobile());
+			user.setLogo(fournisseur.getLogo());
+			// for Downloading logo 
+			/*String logoUrl=fournisseur.getLogo();
+			String logoName=fournisseur.getNomSociete()+""+fournisseur.getId();
+			user.setLogo(logoName+".png");
+			this.imageSave(logoUrl, logoName);*/
 
 			fournisseurRepository.save(user);
 		}
@@ -916,6 +967,93 @@ public class FournisseurController {
 				new ApiResponse(HttpStatus.EXPECTATION_FAILED,
 						"File does not exist")
 				);
+	}
+  
+  @RequestMapping("/logo/{search}")
+	@ResponseBody
+	public ArrayList<String> image(@PathVariable String search) throws IOException {
+		search=search.replaceAll("\\s+",",");
+		String strTemp = Normalizer.normalize(search, Normalizer.Form.NFD);
+      Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+      search=pattern.matcher(strTemp).replaceAll("");
+		ArrayList<String> result = new ArrayList<String>();
+		String url = "https://api.qwant.com/api/search/images";
+		Map<String, String> params = new HashMap<>();
+		params.put("count", "12");
+		params.put("q", search);
+		params.put("t", "images");
+		params.put("safesearch", "0");
+		params.put("uiv", "4");
+		params.put("r", "FR");
+
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			builder.queryParam(entry.getKey(), entry.getValue());
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("User-Agent",
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+				new HttpEntity(headers), String.class);
+		try {
+			JSONObject myObject1 = new JSONObject(response);
+			JSONObject myObject2 = new JSONObject(myObject1.getString("body"));
+			JSONObject myObject3 = new JSONObject();
+			myObject3 = myObject2.getJSONObject("data");
+			JSONObject myObject4 = new JSONObject();
+			myObject4 = myObject3.getJSONObject("result");
+			JSONArray myObject5 = new JSONArray();
+			myObject5 = myObject4.getJSONArray("items");
+			for (int i = 0; i < myObject5.length(); i++) {
+				result.add(myObject5.getJSONObject(i).getString("media"));
+				
+			}
+			System.out.println(result);
+			}catch(JSONException e) {
+				System.out.println("data not found");
+			}
+		return result;
+	}
+	
+	public void imageSave(String url, String filename) throws UnsupportedEncodingException{
+      InputStream inputStream = null;
+      OutputStream outputStream = null;
+      try {
+          URL imgUrl = new URL(url);
+          URLConnection urlc = imgUrl.openConnection();
+          urlc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.11");
+          inputStream = urlc.getInputStream();
+          outputStream = new FileOutputStream("..\\frontend\\src\\main\\frontend\\src\\assets\\logos\\"+filename+".png");
+          System.out.println("ready for downloading");
+          byte[] buffer = new byte[10240];
+          int length;
+          while ((length = inputStream.read(buffer)) != -1) {
+              outputStream.write(buffer, 0, length);
+              System.out.println("Logo Downloading");
+          }
+
+      } catch (MalformedURLException e) {
+          System.out.println("MalformedURLException :- " + e.getMessage());
+
+      } catch (FileNotFoundException e) {
+          System.out.println("FileNotFoundException :- " + e.getMessage());
+
+      } catch (IOException e) {
+          System.out.println("IOException :- " + e.getMessage());
+
+      } finally {
+          try {
+
+              inputStream.close();
+              outputStream.close();
+
+          } catch (IOException|NullPointerException e) {
+              System.out.println("Finally IOException :- " + e.getMessage());
+          }
+      }
 	}
 
 

@@ -16,6 +16,7 @@ export class ProviderService {
   updateUrl = UrlConfig.API_URL + "/api/providers/update";
   exportUrl = UrlConfig.API_URL + "/api/providers/export";
   lastProvidersUrl = UrlConfig.API_URL + "/api/providers/last";
+  logoUrl = UrlConfig.API_URL + "/api/providers/logo";
   constructor(private http: HttpClient) { }
 
   save(provider: Provider) {
@@ -135,7 +136,7 @@ export class ProviderService {
   getProviderByCpv(cpv: string){
     return this.http.get<Provider[]>(this.allProvidersUrl +'/byCpv/'+cpv);
   }
-
-
-
+  getLogoo(search: string) {
+    return this.http.get<String[]>(this.logoUrl+ "/" + search);
+  }
 }

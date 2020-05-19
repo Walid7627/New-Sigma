@@ -14,6 +14,7 @@ import { ProviderContactComponent } from '../provider-contact/provider-contact.c
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ProvidersLogoComponent } from '../providers-logo/providers-logo.component';
 
 // TODO: Confirmation mdp
 // TODO: Champ téléphone vide après inscription
@@ -59,7 +60,7 @@ export class ProvidersReferenceComponent implements OnInit {
   currentFileUpload: File
   uploadProgress: { percentage: number } = { percentage: 0 };
 
-  logo: FileList;
+  logo: string;
 
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
 
@@ -131,14 +132,14 @@ export class ProvidersReferenceComponent implements OnInit {
         confirmmail: this.provider.mail
       });
 
-      if (this.provider.logo) {
+      /**if (this.provider.logo) {
         this.providerService.getLogo(this.provider.logo).subscribe(res => {
           if (res.type === HttpEventType.Response) {
             let documentData: any = res;
             this.logoPreview = URL.createObjectURL(documentData.body);
           }
         });
-      }
+      }*/
 
     }
 
@@ -168,12 +169,13 @@ export class ProvidersReferenceComponent implements OnInit {
     this.loading = true;
 
     if (!this.provider.id) {
+      value.logo=this.logo;
       this.providerService.save(value)
         .subscribe(res => {
           this.loading = false;
           let data: any = res;
           if (data.status === "OK") {
-            if (this.logo) {
+            /**if (this.logo) {
               this.uploadLogo(value.mail).subscribe(event => {
                 if (event.type === HttpEventType.Response) {
                   let data: any = event.body;
@@ -194,9 +196,9 @@ export class ProvidersReferenceComponent implements OnInit {
                 }
               });
               console.log("uploadLogo called");
-            }
+            }*/
 
-            if (this.selectedFiles.length > 0) {
+            /**if (this.selectedFiles.length > 0) {
               this.selectedFiles.forEach(file => {
                 this.upload(value.mail, file).subscribe(event => {
                   this.selectedFiles = undefined;
@@ -223,7 +225,7 @@ export class ProvidersReferenceComponent implements OnInit {
             } else {
               this.registrationSuccessful = true;
               this.provider = JSON.parse(data.message);
-            }
+            }*/
 
             this.showToastSuccessMessage("Fournisseur ajouté avec succès", "Inscription d'un fournisseur");
           } else {
@@ -241,6 +243,7 @@ export class ProvidersReferenceComponent implements OnInit {
           this.showToastErrorMessage("Erreur lors de l'ajout du fournisseur", "Inscription d'un fournisseur");
         });
     } else {
+      value.logo=this.logo;
       value.id = this.provider.id;
       value.maisonMere = (value.typeEntreprise == 'TYPE_MAISON_MERE') ? null : value.maisonMere;
       this.providerService.updateProvider(value)
@@ -250,7 +253,7 @@ export class ProvidersReferenceComponent implements OnInit {
           let data: any = res;
           if (data.status === "OK") {
             if (this.logo) {
-              this.uploadLogo(this.provider.mail).subscribe(event => {
+              /**this.uploadLogo(this.provider.mail).subscribe(event => {
                 if (event.type === HttpEventType.Response) {
                   let data: any = event.body;
                   console.log("uploadLogo called");
@@ -271,7 +274,7 @@ export class ProvidersReferenceComponent implements OnInit {
                     });
                   }
                 }
-              });
+              });*/
               this.showToastSuccessMessage("Fournisseur modifié avec succès", "Modification d'un fournisseur");
 
             } else {
@@ -317,10 +320,10 @@ export class ProvidersReferenceComponent implements OnInit {
     this.logo = event.target.files;
   }
 
-
+  /** 
   uploadLogo(user_credentials) {
     return this.uploadService.upload(this.logo.item(0), user_credentials, "TYPE_LOGO");
-  }
+  }*/
 
   showContacts() {
     const dialogConfig = new MatDialogConfig();
@@ -348,6 +351,20 @@ export class ProvidersReferenceComponent implements OnInit {
       timeOut: 3000,
     });
     window.scroll(0, 0);
+  }
+
+  onCreate(nomSociete : String) {
+    console.log("debut onCreate()");
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "80%";
+    dialogConfig.data={logoPreview : ""}
+    const dialogRef = this.dialog.open(ProvidersLogoComponent,dialogConfig);
+    dialogRef.componentInstance.nomSociete = nomSociete;
+    dialogRef.afterClosed().subscribe(result => {
+      this.logo=result;
+    });
   }
 
 }

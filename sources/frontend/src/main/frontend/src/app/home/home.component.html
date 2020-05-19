@@ -15,7 +15,7 @@
             <div *ngFor="let provider of providers; let i = index" [class]="i === 0 ? 'carousel-item active' : 'carousel-item'" >
                 <div class="col-12 col-md-4">
                     <div class="card mb-2">
-                        <img class="card-img-top" [src]="imagesUrl.get(provider.id)"  alt="">
+                        <img class="card-img-top" src="{{provider.logo}}"  alt="">
                         <div class="card-body">
                             <h4 class="card-title font-weight-bold">{{provider.nomSociete}}</h4>
                             <p class="card-text"><b>Domaine : </b> {{provider.domaine}}</p>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="card mb-2">
-                        <img class="card-img-top" [src]="imagesUrl.get(providers[(i+1) % providers.length].id)"  alt="">
+                        <img class="card-img-top" src="{{providers[(i+1) % providers.length].logo}}"  alt="">
                         <div class="card-body">
                             <h4 class="card-title font-weight-bold">{{providers[(i+1) % providers.length].nomSociete}}</h4>
                             <p class="card-text"><b>Domaine : </b> {{providers[(i+1) % providers.length].domaine}}</p>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="card mb-2">
-                        <img class="card-img-top" [src]="imagesUrl.get(providers[(i+2) % providers.length].id)"  alt="">
+                        <img class="card-img-top" src="{{providers[(i+2) % providers.length].logo}}"  alt="">
                         <div class="card-body">
                             <h4 class="card-title font-weight-bold">{{providers[(i+2) % providers.length].nomSociete}}</h4>
                             <p class="card-text"><b>Domaine : </b> {{providers[(i+2) % providers.length].domaine}}</p>

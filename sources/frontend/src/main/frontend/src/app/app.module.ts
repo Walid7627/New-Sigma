@@ -16,6 +16,7 @@ import { MatMenuModule} from '@angular/material/menu';
 import { MatDialogModule} from '@angular/material/dialog';
 import { MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatTableModule} from '@angular/material/table';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 //import { HttpModule } from '@angular/http';
@@ -104,6 +105,7 @@ import {MyBarChartComponent} from "./my-bar-chart/my-bar-chart.component";
 
 import {ChartsModule} from 'ng2-charts';
 import {NgApexchartsModule} from "ng-apexcharts";
+import { ProvidersLogoComponent } from './providers-logo/providers-logo.component';
 
 
 
@@ -178,7 +180,8 @@ const appRoutes: Routes = [
     ProvidersSegmentComponent,
     ProviderQualificationComponent,
     ProviderShowQualificationComponent,
-    MyBarChartComponent
+    MyBarChartComponent,
+    ProvidersLogoComponent
   ],
   imports: [
     FormsModule,
@@ -213,7 +216,8 @@ const appRoutes: Routes = [
     CarouselModule.forRoot(),
     WavesModule.forRoot(),
     ChartsModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    MatGridListModule
   ],
   providers: [
     CodeCPVService,

@@ -1,0 +1,29 @@
+<div class="container-fluid">
+    <div toastContainer></div>
+    <div class="ps" style="position: relative; width: 100%;">
+        <div class="center">
+            <mat-toolbar class="col-sm-10">
+                <legend class="text-center"><strong>Logos</strong>
+                </legend>
+                <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+                    class="material-icons">close</i></button>
+            </mat-toolbar>
+        </div>
+        <div class="center">
+            <mat-form-field appearance="fill">
+                <mat-label>Recherche (Appuyez sur Entrée)</mat-label>
+                <input #box matInput placeholder="{{nomSociete}}" (keyup.enter)="onKeyup(box.value)">
+            </mat-form-field>
+        </div>
+    </div>
+    <mat-grid-list cols="4" row="3" rowHeight="100px" gutterSize ="10px">
+        <mat-grid-tile [style.background]="'#DDBDF1'" *ngFor="let img of url">
+            <img src="{{img}}" (click)="onClick(img)">
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div *ngIf="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+</div>
