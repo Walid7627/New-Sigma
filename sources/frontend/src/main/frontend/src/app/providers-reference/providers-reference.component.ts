@@ -198,7 +198,7 @@ export class ProvidersReferenceComponent implements OnInit {
               console.log("uploadLogo called");
             }*/
 
-            /**if (this.selectedFiles.length > 0) {
+            if (this.selectedFiles.length > 0) {
               this.selectedFiles.forEach(file => {
                 this.upload(value.mail, file).subscribe(event => {
                   this.selectedFiles = undefined;
@@ -225,7 +225,7 @@ export class ProvidersReferenceComponent implements OnInit {
             } else {
               this.registrationSuccessful = true;
               this.provider = JSON.parse(data.message);
-            }*/
+            }
 
             this.showToastSuccessMessage("Fournisseur ajouté avec succès", "Inscription d'un fournisseur");
           } else {
