@@ -108,7 +108,7 @@ export class SegmentComponent implements OnInit {
    
     if (this.segment.id == null ) {
       const seg = this.formGroup.value; 
-      const s = new Segment(seg['nom'], seg['cpv'], seg['purchaser']);
+      const s = new Segment(seg['nom'], seg['cpv'], seg['acheteur']);
       this.segment =s ;
       this.segmentService.save(s)
       .subscribe(res => {
