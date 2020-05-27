@@ -57,7 +57,7 @@ public class EmailServiceImpl implements EmailService {
 		
 
 	    
-	    //emailSender.send(mimeMessage);
+	    emailSender.send(mimeMessage);
 	    
 	    
 
