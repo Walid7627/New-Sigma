@@ -21,6 +21,7 @@ export class ProvidersLogoComponent implements OnInit {
   constructor(public providerService: ProviderService, private dialog: MatDialog, public dialogRef: MatDialogRef<ProvidersLogoComponent>,@Inject(MAT_DIALOG_DATA) public data : string) { }
 
   ngOnInit(): void {
+    this.nomSociete=this.nomSociete.split(' ').join(',');
     this.urlsTab = this.providerService.getLogoo(this.nomSociete);
     this.loading=true;
     this.urlsTab.forEach(element=>{
@@ -36,6 +37,7 @@ export class ProvidersLogoComponent implements OnInit {
     this.dialogRef.close(this.data);
   }
   onKeyup(value: string){
+    value=value.split(' ').join(',');
     this.urlsTab = this.providerService.getLogoo(value);
     this.loading=true;
     this.urlsTab.forEach(element=>{
