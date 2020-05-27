@@ -6,13 +6,19 @@ export class Segment {
     id: number;
     libelle: string;
     codeCPV: string;
-    acheteur: number;
+    codesCPV :Array<string>;
+    //acheteur: number;
+    acheteur:Array<string>;
     
-    constructor(libelle : string, codeCPV : string, acheteur: number){
+    constructor(libelle : string, codeCPV : Array<string>, acheteur: Array<string>){
         this.libelle=libelle;
-        this.codeCPV=codeCPV;
+        this.codesCPV=codeCPV;
+       // this.acheteur=acheteur;
         this.acheteur=acheteur;
         
     }
+    
+
+  /* constructor(){}*/
     
 }

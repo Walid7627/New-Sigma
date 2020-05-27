@@ -1,9 +1,11 @@
 package com.sigma.controller;
 
 import com.sigma.dto.SegmentDto;
+import com.sigma.model.Acheteur;
 import com.sigma.model.ApiResponse;
 import com.sigma.model.Fournisseur;
 import com.sigma.model.Segment;
+import com.sigma.repository.AcheteurRepository;
 import com.sigma.repository.SegmentRepository;
 import com.sigma.util.IterableToList;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -75,17 +78,51 @@ public class SegmentController {
 							"Name cannot be empty")
 					);
 		}
-
-          s = new Segment(segment.getLibelle(), segment.getCodeCPV(), segment.getCodeAPE());
+		List<Acheteur> liste = new ArrayList<Acheteur>();
+		if(segment.getAcheteurs()!=null) {
+		
+		for(Long ach : segment.getAcheteurs()) {
+			Acheteur a = acheteurRepository.findOne(ach);
+			
+				liste.add(a);
+				
+				
+		}
+		}
+		  System.out.println("acheteurs "+liste);
+          s = new Segment(segment.getLibelle(), segment.getCodesCPV(), liste);   
           segmentRepository.save(s);
      
 
+          
       return objectMapper.writeValueAsString(
         new ApiResponse(HttpStatus.OK,
                         "Team successfully created\nReceived input:\n" + objectMapper.writeValueAsString(segment))
       );
     }
+	@PostMapping("/searchById")
+	@ResponseBody
+	public String getSegment(@RequestParam Long id) throws com.fasterxml.jackson.core.JsonProcessingException {
+		try {
+			Segment segment= segmentRepository.findOne(id);
+			
+			if (segment == null) {
+				return objectMapper.writeValueAsString(
+						new ApiResponse(HttpStatus.BAD_REQUEST,
+								"Segment " + id + " does not exist")
+						);
+			}
 
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.OK,
+							objectMapper.writeValueAsString(segment))
+					);
+		}
+		catch (Exception ex) {
+			return "Error updating the Segment: " + ex.toString();
+		}
+		
+	}
     /**
      * GET /delete  --> Delete the user having the passed id.
      */
@@ -149,6 +186,8 @@ public class SegmentController {
 
     @Autowired
     private SegmentRepository segmentRepository;
+    @Autowired
+    private AcheteurRepository acheteurRepository;
 
     @Autowired
     private ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);

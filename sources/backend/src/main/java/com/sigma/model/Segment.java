@@ -17,8 +17,24 @@ public class Segment {
 
   // @OneToOne
   private String cpv;
+  
+  @ElementCollection
+  @CollectionTable(name = "segment_cpv")
+  private List<String> codesCPV;
 
-  // @OneToOne
+  @OneToMany(
+  cascade = CascadeType.ALL,
+  orphanRemoval = true
+  )
+  private List<Acheteur> acheteurs;
+  public List<Acheteur> getAcheteurs() {
+	return acheteurs;
+}
+public void setAcheteurs(List<Acheteur> acheteurs) {
+	this.acheteurs = acheteurs;
+}
+
+// @OneToOne
   private String ape;
 
   @OneToMany
@@ -27,7 +43,13 @@ public class Segment {
   @ManyToOne
   private Acheteur acheteur;
 
-  public Segment(String libelle, String cpv, String ape, List<Metrique> metriques) {
+  public List<String> getCodesCPV() {
+	return codesCPV;
+}
+public void setCodesCPV(List<String> codesCPV) {
+	this.codesCPV = codesCPV;
+}
+public Segment(String libelle, String cpv, String ape, List<Metrique> metriques) {
     this.libelle = libelle;
     this.cpv = cpv;
     this.ape = ape;
@@ -41,6 +63,16 @@ public class Segment {
 public Segment(SegmentDto segment) {
 	
 	
+}
+public Segment(String libelle, List<String> Codescpv, List<Acheteur> acheteurs) {
+	
+	 this.libelle = libelle;
+	  this.codesCPV = Codescpv;
+	  this.acheteurs=acheteurs;
+}
+public Segment(String libelle, List<String> Codescpv) {
+	  this.libelle = libelle;
+	  this.codesCPV = Codescpv;
 }
   public Segment() { }
   /*@Id

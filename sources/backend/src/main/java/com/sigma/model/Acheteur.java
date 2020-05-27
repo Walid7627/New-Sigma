@@ -27,6 +27,7 @@ public class Acheteur extends Utilisateur {
 	
 	@OneToMany(mappedBy="acheteur")
 	private List<Segment> segments;
+	
 
 	
 

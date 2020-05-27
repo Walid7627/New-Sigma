@@ -8,4 +8,5 @@ export class Team {
   entite: number;
   responsable: number;
   membres: Array<number>;
+  
 }

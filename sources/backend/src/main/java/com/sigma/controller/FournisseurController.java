@@ -605,6 +605,7 @@ public class FournisseurController {
 					);
 		}
 		catch (Exception ex) {
+			
 			return "Error updating the provider: " + ex.toString();
 		}
 	}
