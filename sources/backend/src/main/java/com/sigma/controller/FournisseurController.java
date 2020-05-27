@@ -993,7 +993,14 @@ public class FournisseurController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("User-Agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+				"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+		headers.set("Content-Type" , "application/json; charset=UTF-8");
+		headers.set("Access-Control-Allow-Origin", "*");
+		headers.set("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+		headers.set("Access-Control-Allow-Headers", "*");
+		headers.set("Access-Control-Allow-Credentials", "true");
+		headers.set("Access-Control-Max-Age", "180");
+		
 		RestTemplate restTemplate = new RestTemplate();
 
 		HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
