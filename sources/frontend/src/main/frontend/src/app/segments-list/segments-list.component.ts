@@ -24,7 +24,7 @@ export class SegmentsListComponent implements OnInit {
   // propriété
   allaSegments: any;
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['nom', 'cpv', 'acheteur', 'edit', 'delete','fournisseur'];
+  displayedColumns: string[] = ['nom', /*'cpv',*/ 'acheteur', 'edit', 'delete','fournisseur'];
   resultsLength = 0;
   searchKey: string;
   segments: Segment[];

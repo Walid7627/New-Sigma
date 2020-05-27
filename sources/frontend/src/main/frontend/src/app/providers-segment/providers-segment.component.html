@@ -1,14 +1,44 @@
 <div class="center">
     <div><button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
         class="material-icons">close</i></button></div>
-    <div class="search-div">
+       
+        
+      </div>
+      <form (ngSubmit)="onSubmit(formGroup)" [formGroup]="formGroup">
+        <div class="col-sm-7 row divMM">
+        <label class="control-label col-sm-3">Code CPV</label>
+        <div class="col-sm-9 divMM">
+          <div class="input-group divMM">
+            <div class="input-group-prepend"> <span class="input-group-text">
+              <i class="fa fa-th-list"></i>
+          </span> </div>
+                <ng-select [virtualScroll]="true" [items]="codesCpv" [multiple]="false"
+                    [closeOnSelect]="true" placeholder="code CPV" formControlName="cpv">                              
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item}} 
+                    </ng-template>
+                </ng-select>
+                <div class="col-sm-6 my-auto">
+                  <div class="input-group">
+                      <button  type="submit" [disabled]="!formGroup.valid" mat-raised-button >
+                          <mat-icon>done</mat-icon>Valider
+                      </button>
+                  </div>
+              </div>
+          </div>
+         
+        </div>
+                </div>
+                
+              </form>
+    <!--div class="search-div">
       <mat-form-field class="search-form-field" floatLabel="never">
         <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
         <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="" (click)="onSearchClear()">
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
-    </div>
+    </div-->
   
     <div class="mat-elevation-z8">
       <mat-table #table [dataSource]="dataSource" class="entities-table" matSort matSortActive="id" matSortDirection="asc">
@@ -35,6 +65,7 @@
   
     <mat-paginator [pageSizeOptions]="[10, 20, 50]">
     </mat-paginator>
+    </div>
     <div *ngIf="loading" class="spinner">
         <div class="bounce1"></div>
         <div class="bounce2"></div>

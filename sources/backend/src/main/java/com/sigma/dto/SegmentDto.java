@@ -1,5 +1,6 @@
 package com.sigma.dto;
 
+import com.sigma.model.Acheteur;
 import com.sigma.model.Metrique;
 
 import java.util.List;
@@ -8,13 +9,25 @@ import java.util.List;
 
 public class SegmentDto {
 	private Long id;
-
 	private String libelle;
-
 	private String cpv;
+	private List<Long>acheteurs;
+	public List<Long> getAcheteurs() {
+		return acheteurs;
+	}
 
+	public void setAcheteurs(List<Long> acheteurs) {
+		this.acheteurs = acheteurs;
+	}
 	private String ape;
+	private List<String> codesCPV;
+	public List<String> getCodesCPV() {
+		return codesCPV;
+	}
 
+	public void setCodesCPV(List<String> codesCPV) {
+		this.codesCPV = codesCPV;
+	}
 	private List<Metrique> metriques;
 
 	public String getLibelle() {

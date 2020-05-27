@@ -3,9 +3,9 @@
     <div class="ps" style="position: relative; width: 100%; max-height: 500px;" [perfectScrollbar]="config">
         <div class="container-fluid">
             <mat-toolbar class="col-sm-10">
-                <legend *ngIf="!segment.id" class="text-center"><strong>Formulaire d'ajout d'un segement</strong>
+                <legend *ngIf="!segment.id" class="text-center"><strong>Formulaire d'ajout d'un segement d'achat</strong>
                 </legend>
-                <legend *ngIf="segment.id" class="text-center"><strong>Formulaire de modification d'un segment</strong>
+                <legend *ngIf="segment.id" class="text-center"><strong>Formulaire de modification d'un segment d'achat</strong>
                 </legend>
                 <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
                         class="material-icons">close</i></button>
@@ -26,11 +26,14 @@
                                 <input formControlName="nom" placeholder="Nom " class="form-control"
                                     type="text">
                             </div>
-                            <div *ngIf="formGroup.controls['nom'].errors && formGroup.controls['nom'].touched"
+                            <div class="invalid-feedback hidden m-t-10">
+                                <div>Le nom est requis</div>
+                              </div>
+                            <!--div *ngIf="formGroup.controls['nom'].errors && formGroup.controls['nom'].touched"
                                 class="alert alert-danger m-t-10">
                                 <div [hidden]="!formGroup.controls['nom'].errors.required">Le nom est requis
                                 </div>
-                            </div>
+                            </div-->
                         </div>
                     </div>
                     <div class="form-group row">
@@ -40,8 +43,8 @@
                                 <div class="input-group-prepend"> <span class="input-group-text">
                                         <i class="fa fa-th-list"></i>
                                     </span> </div>
-                                <ng-select [virtualScroll]="true" [items]="listcpv | async" [multiple]="false"
-                                    [closeOnSelect]="true" bindLabel="libelleCpv" bindValue="codeCpv"
+                                <ng-select [virtualScroll]="true" [items]="listcpv | async" [multiple]="true"
+                                    [closeOnSelect]="false" bindLabel="libelleCpv" bindValue="codeCpv"
                                     placeholder="Selectionnez des codes CPV" formControlName="cpv">
                                     <ng-template ng-label-tmp let-item="item">
                                         {{item.libelleCpv}} 
@@ -60,11 +63,11 @@
                                 <!-- <select class="form-control" formControlName="codeAPE">
                     <option *ngFor="let code of listCodeApe" value="{{code.codeApe}}">{{code.codeApe}} - {{code.libelleApe}}</option>
                   </select> -->
-                                <ng-select [virtualScroll]="true" [items]="listAcheteur | async" [multiple]="false"
-                                    [closeOnSelect]="true" bindLabel="libelleAcheteur" bindValue="nom"
+                                <ng-select [virtualScroll]="true" [items]="listAcheteur | async" [multiple]="true"
+                                    [closeOnSelect]="false" bindLabel="libellePurchasers" bindValue="id"
                                     placeholder="Selectionnez un Acheteur" formControlName="acheteur">
                                     <ng-template ng-label-tmp let-item="item">
-                                        {{item.libelleAcheteur}}
+                                        {{item.libellePurchasers}}
                                     </ng-template>
                                 </ng-select>
                             </div>

@@ -30,6 +30,7 @@ export class SegmentComponent implements OnInit {
   nom: string;
   action: string;
   segment: Segment = new Segment(null,null,null);
+  //segment: Segment = new Segment();
   error: string;
   registrationError: boolean =false;
   registrationSuccessful: boolean = false;
@@ -55,13 +56,14 @@ export class SegmentComponent implements OnInit {
       this.formGroup.setValue({
         nom: this.segment.libelle,
         acheteur: this.segment.acheteur,
-        cpv: this.segment.codeCPV
+        //cpv: this.segment.codeCPV
+        cpv: this.segment.codesCPV
       });
     }
   }
   createForm(){
     this.formGroup = this.formBuilder.group({
-      acheteur: ['', Validators.required],
+      acheteur:[null, Validators.required],
       cpv:['',Validators.required],
       nom:['',Validators.required]
     });
@@ -69,49 +71,49 @@ export class SegmentComponent implements OnInit {
   onClose() {
     this.dialogRef.close();
   }
- /* getListAcheteur(){
-    this.listape = this.serviceAPE.getCodeApe().pipe(map(result => {
-      const items = <any[]>result;
-      items.forEach(item => item.libelleApe = item.codeApe + " - " + item.libelleApe);
-      console.log('itemes ',items);
-      return items;
-    }));
-
-    
-  }*/
   getListAcheteur(){
     this.listAcheteur=this.servicePurchaser.getAllPurchaser().pipe(map(
       result=>{
         const items =<any[]>result;
-        items.forEach(item => item.libelleAcheteur =item.nom+"-"+item.prenom);
+        items.forEach(item => item.libellePurchasers =item.nom+" - "+item.prenom);
         console.log("itemes " , items);
         return items;
-      }))
+      }));
+
   }
   getListCPV(){
     this.listcpv = this.serviceCPV.getCodeCpv().pipe(map(result => {
       const items = <any[]>result;
       items.forEach(item => item.libelleCpv = item.codeCpv + " - " + item.libelleCpv);
+     
       return items;
+     
     }));
 
   }
-  onSubmit({value, valid}: {value: Segment, valid: boolean}){
+  onSubmit({value}: {value: Segment}){
 
-    console.log('TEST Value ', value.libelle, value.codeCPV);
+    //console.log('TEST Value ', value.libelle, value.codesCPV, value.acheteur);
     this.error = "";
     this.registrationError = false;
     this.registrationSuccessful = false;
     this.loading = true;
     console.log("avant submit");
     
-   
     if (this.segment.id == null ) {
       const seg = this.formGroup.value; 
-      const s = new Segment(seg['nom'], seg['cpv'], seg['acheteur']);
-      this.segment =s ;
+      const list =value.acheteur.map(String);
+     // console.log("La liste transformer en string",list.toLocaleString);
+   
+     const s = new Segment(seg['nom'], seg['cpv'],seg['acheteur']);
+
+     //console.log("le segment avec liste cpv ", s.codesCPV);
+     //console.log("ici la listes des acheteurs d'un segment ", s.acheteur);
       this.segmentService.save(s)
       .subscribe(res => {
+
+      
+
         this.loading = false;
         console.log("Service data:");
         console.log(res);
@@ -144,8 +146,9 @@ export class SegmentComponent implements OnInit {
     value.id = this.segment.id;
   const formValue = this.formGroup.value;
   this.segment.libelle = formValue['nom'];
-  this.segment.codeCPV = formValue['cpv'];
-  this.segment.acheteur = formValue['purchaser'];
+ // this.segment.codeCPV = formValue['cpv'];
+ this.segment.codesCPV = formValue['cpv'];
+  this.segment.acheteur = formValue['acheteur'];
   console.log(this.segment.libelle);
       this.segmentService.updateSegment(this.segment)
       .subscribe(res => {

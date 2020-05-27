@@ -9,6 +9,7 @@ import { DialogService } from '../service/dialog-service';
 import { ProviderService } from '../service/provider.service';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { from } from 'rxjs';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-providers-segment',
@@ -19,11 +20,13 @@ export class ProvidersSegmentComponent implements OnInit {
   segment: Segment;
   listFournisseurs: any[];
   dataSource = new MatTableDataSource();
+  codesCpv:any;
+  formGroup: FormGroup;
   displayedColumns: string[] = ['nomSociete', 'mail', 'cpv'];
   resultsLength = 0;
   searchKey: string;
   loading: boolean;
-  constructor(private router: Router, private providerService: ProviderService, 
+  constructor(private formBuilder: FormBuilder,private router: Router, private providerService: ProviderService, 
     public dialogRef: MatDialogRef<ProvidersSegmentComponent>,private dialog: MatDialog, private dialogService: DialogService,private toastrService: ToastrService) { }
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -31,11 +34,21 @@ export class ProvidersSegmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.getFournisseurBycpv();
-    this.loadData();
+    //this.loadData();
+    this.codesCpv = this.segment.codesCPV;
+   console.log("tester les codes ",this.codesCpv);
     this.loading = false;
+    this.createForm();
   }
-loadData(){
-  this.providerService.getProviderByCpv(this.segment.codeCPV).subscribe(
+  createForm(){
+    this.formGroup = this.formBuilder.group({
+
+      cpv:['',Validators.required]
+    });
+  }
+loadData(cpv : string){
+  console.log("la liste des code cpv",this.segment.codesCPV,"apres afficha");
+  this.providerService.getProviderByCpv(cpv).subscribe(
     result=> {
       if(result){
         this.listFournisseurs = JSON.parse (result['message']);
@@ -61,6 +74,19 @@ getFournisseurBycpv(){
     console.log(err);
   });
   }
+  onSubmit(formGroup){
+    console.log("on Submit avec un code cpv ",this.formGroup.value );
+    const codecpv = this.formGroup.value['cpv'];
+    console.log("un code cpv ",codecpv);
+    this.loadData(codecpv);
+
+  }
+  /*getListCPV(){
+    this.codesCpv = this.segment.codesCPV.forEach(
+      item => item.libelleCpv = item.codeCpv + " - " + item.libelleCpv);
+    );
+
+  }*/
 applyFilter() {
   const search = this.searchKey.trim().toLowerCase();
   this.dataSource.filter = search;
