@@ -972,7 +972,7 @@ public class FournisseurController {
   @RequestMapping("/logo/{search}")
 	@ResponseBody
 	public ArrayList<String> image(@PathVariable String search) throws IOException {
-		search=search.replaceAll("\\s+",",");
+		search=search.replaceAll(" ",",");
 		String strTemp = Normalizer.normalize(search, Normalizer.Form.NFD);
       Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
       search=pattern.matcher(strTemp).replaceAll("");
