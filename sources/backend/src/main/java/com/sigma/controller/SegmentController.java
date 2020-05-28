@@ -78,7 +78,7 @@ public class SegmentController {
 							"Name cannot be empty")
 					);
 		}
-		List<Acheteur> liste = new ArrayList<Acheteur>();
+		/*List<Acheteur> liste = new ArrayList<Acheteur>();
 		if(segment.getAcheteurs()!=null) {
 		
 		for(Long ach : segment.getAcheteurs()) {
@@ -89,8 +89,8 @@ public class SegmentController {
 				
 		}
 		}
-		  System.out.println("acheteurs "+liste);
-          s = new Segment(segment.getLibelle(), segment.getCodesCPV(), liste);   
+		  System.out.println("acheteurs "+liste);*/
+          s = new Segment(segment.getLibelle(), segment.getCodesCPV());   
           segmentRepository.save(s);
      
 

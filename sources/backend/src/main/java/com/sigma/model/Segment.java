@@ -23,17 +23,18 @@ public class Segment {
   
   private List<String> codesCPV;
 
-  @OneToMany(
+  /*@OneToMany(
   cascade = CascadeType.ALL,
   orphanRemoval = true
   )
   private List<Acheteur> acheteurs;
+  
   public List<Acheteur> getAcheteurs() {
 	return acheteurs;
 }
 public void setAcheteurs(List<Acheteur> acheteurs) {
 	this.acheteurs = acheteurs;
-}
+}*/
 
 // @OneToOne
   private String ape;
@@ -65,12 +66,12 @@ public Segment(SegmentDto segment) {
 	
 	
 }
-public Segment(String libelle, List<String> Codescpv, List<Acheteur> acheteurs) {
+/*public Segment(String libelle, List<String> Codescpv, List<Acheteur> acheteurs) {
 	
 	 this.libelle = libelle;
 	  this.codesCPV = Codescpv;
 	  this.acheteurs=acheteurs;
-}
+}*/
 public Segment(String libelle, List<String> Codescpv) {
 	  this.libelle = libelle;
 	  this.codesCPV = Codescpv;
