@@ -17,10 +17,14 @@ public class Segment {
 
   // @OneToOne
   private String cpv;
-  // commentaire
+  
+  //commentaire
   @ElementCollection
   @CollectionTable(name = "segment_cpv")
-  
+ /* @OneToMany(
+		  cascade = CascadeType.ALL,
+		  orphanRemoval = true
+		  )*/
   private List<String> codesCPV;
 
   /*@OneToMany(
