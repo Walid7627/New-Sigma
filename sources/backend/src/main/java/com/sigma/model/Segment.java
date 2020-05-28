@@ -17,9 +17,10 @@ public class Segment {
 
   // @OneToOne
   private String cpv;
-  
+  // commentaire
   @ElementCollection
   @CollectionTable(name = "segment_cpv")
+  
   private List<String> codesCPV;
 
   @OneToMany(
