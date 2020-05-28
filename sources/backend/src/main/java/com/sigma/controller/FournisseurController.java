@@ -970,6 +970,7 @@ public class FournisseurController {
 				);
 	}
   
+  @CrossOrigin(origins = "*", maxAge = 3600)
   @RequestMapping("/logo/{search}")
 	@ResponseBody
 	public ArrayList<String> image(@PathVariable String search) throws IOException {
